@@ -5,21 +5,31 @@ const path = require("path");
 
 const app = express();
 
-// ✅ PORT RAILWAY
+// =======================
+// PORT
+// =======================
 const PORT = process.env.PORT || 3000;
 
-// 🔐 Admin password
+// =======================
+// ADMIN PASSWORD
+// =======================
 const ADMIN_PASSWORD = "parajuna2026";
 
-// Middlewares
+// =======================
+// MIDDLEWARES
+// =======================
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 📂 Static files
+// =======================
+// STATIC FILES (frontend)
+// =======================
 app.use(express.static(__dirname));
 
-// ⚠️ DATABASE (Railway MySQL)
+// =======================
+// DATABASE (Railway MySQL)
+// =======================
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
@@ -28,30 +38,36 @@ const db = mysql.createConnection({
     port: process.env.MYSQLPORT
 });
 
-// 🔍 DEBUG MYSQL VARIABLES
+// =======================
+// DEBUG ENV
+// =======================
 console.log("MYSQLHOST =", process.env.MYSQLHOST);
 console.log("MYSQLUSER =", process.env.MYSQLUSER);
 console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
 
-// Connexion DB
+// =======================
+// DB CONNECTION
+// =======================
 db.connect((err) => {
     if (err) {
-        console.error("❌ Erreur connexion base de données :", err);
+        console.error("❌ Database connection error:", err);
         return;
     }
-    console.log("✔ Base de données connectée");
+    console.log("✔ Database connected successfully");
 });
 
-
-// 🏠 HOME PAGE
+// =======================
+// HOME ROUTE
+// =======================
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "parajuna.html"));
 });
 
-
-// 📝 INSCRIPTION
+// =======================
+// REGISTER USER
+// =======================
 app.post("/api/register", (req, res) => {
-    console.log("📩 INSCRIPTION REÇUE :", req.body);
+    console.log("📩 NEW REGISTER:", req.body);
 
     const { name, email, phone, profession, program } = req.body;
 
@@ -69,11 +85,11 @@ app.post("/api/register", (req, res) => {
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
         if (err) {
-            console.error("❌ SQL ERROR FULL:", err);
+            console.error("❌ SQL ERROR:", err);
 
             return res.status(500).json({
                 success: false,
-                message: err.message
+                message: "Erreur base de données"
             });
         }
 
@@ -84,8 +100,9 @@ app.post("/api/register", (req, res) => {
     });
 });
 
-
-// 🔐 ADMIN LOGIN
+// =======================
+// ADMIN LOGIN
+// =======================
 app.post("/api/admin/login", (req, res) => {
     const { password } = req.body;
 
@@ -102,14 +119,16 @@ app.post("/api/admin/login", (req, res) => {
     });
 });
 
-
-// 📋 LISTE INSCRIPTIONS
+// =======================
+// GET ALL INSCRIPTIONS
+// =======================
 app.get("/api/admin/inscriptions", (req, res) => {
     const sql = "SELECT * FROM inscriptions ORDER BY id DESC";
 
     db.query(sql, (err, results) => {
         if (err) {
-            console.error("❌ Erreur chargement :", err);
+            console.error("❌ Error loading data:", err);
+
             return res.status(500).json({
                 success: false,
                 message: "Erreur serveur"
@@ -123,8 +142,9 @@ app.get("/api/admin/inscriptions", (req, res) => {
     });
 });
 
-
-// 🚀 START SERVER
+// =======================
+// START SERVER
+// =======================
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur lancé sur port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
