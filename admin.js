@@ -8,6 +8,7 @@ const inscriptionsTable = document.getElementById("inscriptionsTable");
 const totalCount = document.getElementById("totalCount");
 const dashboardMessage = document.getElementById("dashboardMessage");
 
+// LOGIN ADMIN
 adminLoginForm.addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -20,7 +21,7 @@ adminLoginForm.addEventListener("submit", async function(e) {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/admin/login", {
+        const response = await fetch("/api/admin/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -39,13 +40,15 @@ adminLoginForm.addEventListener("submit", async function(e) {
         localStorage.setItem("parajunaAdmin", "connected");
         showDashboard();
         loadInscriptions();
+
     } catch (error) {
         loginMessage.style.color = "#ef4444";
-        loginMessage.textContent = "Erreur : serveur non connecté.";
+        loginMessage.textContent = "Erreur serveur.";
         console.error(error);
     }
 });
 
+// LOGOUT
 logoutBtn.addEventListener("click", function() {
     localStorage.removeItem("parajunaAdmin");
     dashboard.classList.remove("active");
@@ -54,14 +57,16 @@ logoutBtn.addEventListener("click", function() {
     loginMessage.textContent = "";
 });
 
+// SHOW DASHBOARD
 function showDashboard() {
     loginCard.style.display = "none";
     dashboard.classList.add("active");
 }
 
+// LOAD INSCRIPTIONS
 async function loadInscriptions() {
     try {
-        const response = await fetch("http://localhost:3000/api/admin/inscriptions");
+        const response = await fetch("/api/admin/inscriptions");
         const result = await response.json();
 
         if (!result.success) {
@@ -71,6 +76,7 @@ async function loadInscriptions() {
         }
 
         renderInscriptions(result.inscriptions);
+
     } catch (error) {
         dashboardMessage.style.color = "#ef4444";
         dashboardMessage.textContent = "Impossible de charger les inscriptions.";
@@ -78,6 +84,7 @@ async function loadInscriptions() {
     }
 }
 
+// RENDER TABLE
 function renderInscriptions(inscriptions) {
     totalCount.textContent = inscriptions.length;
 
@@ -108,6 +115,7 @@ function renderInscriptions(inscriptions) {
     }).join("");
 }
 
+// AUTO LOGIN
 if (localStorage.getItem("parajunaAdmin") === "connected") {
     showDashboard();
     loadInscriptions();
