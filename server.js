@@ -5,7 +5,7 @@ const path = require("path");
 
 const app = express();
 
-// ✅ PORT RAILWAY (IMPORTANT)
+// ✅ PORT RAILWAY
 const PORT = process.env.PORT || 3000;
 
 // 🔐 Admin password
@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // 📁 Static files (frontend)
 app.use(express.static(path.join(__dirname, "..")));
 
-// ⚠️ DATABASE (MySQL LOCAL -> attention Railway)
+// ⚠️ DATABASE (Railway MySQL)
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
@@ -37,21 +37,23 @@ db.connect((err) => {
     console.log("✔ Base de données connectée");
 });
 
-// Home route
+
+// 🏠 PAGE ACCUEIL (ouvre ton HTML)
 app.get("/", (req, res) => {
-    res.send("Backend Parajuna fonctionne ✔");
+    res.sendFile(path.join(__dirname, "..", "parajuna.html"));
 });
+
 
 // 📝 INSCRIPTION
 app.post("/api/register", (req, res) => {
     const { name, email, phone, profession, program } = req.body;
 
     if (!name || !email || !phone || !profession || !program) {
-    return res.status(400).json({
-        success: false,
-        message: "Veuillez remplir tous les champs."
-    });
- }
+        return res.status(400).json({
+            success: false,
+            message: "Veuillez remplir tous les champs."
+        });
+    }
 
     const sql = `
         INSERT INTO inscriptions (name, email, phone, profession, program)
@@ -74,6 +76,7 @@ app.post("/api/register", (req, res) => {
     });
 });
 
+
 // 🔐 ADMIN LOGIN
 app.post("/api/admin/login", (req, res) => {
     const { password } = req.body;
@@ -90,6 +93,7 @@ app.post("/api/admin/login", (req, res) => {
         message: "Connexion réussie ✔"
     });
 });
+
 
 // 📋 LISTE INSCRIPTIONS
 app.get("/api/admin/inscriptions", (req, res) => {
@@ -110,6 +114,7 @@ app.get("/api/admin/inscriptions", (req, res) => {
         });
     });
 });
+
 
 // 🚀 START SERVER
 app.listen(PORT, () => {
