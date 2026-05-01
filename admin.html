@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Parajuna 2026</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<main class="admin-page">
+    <section class="admin-left">
+        <div class="brand-box">
+            <h1>PARAJUNA 2026</h1>
+            <p>Espace administrateur</p>
+        </div>
+    </section>
+
+    <section class="admin-right">
+        <div class="login-card" id="loginCard">
+            <h2>Connexion admin</h2>
+            <p>Accédez à la liste des participants inscrits.</p>
+
+            <form id="adminLoginForm">
+                <div class="input-group">
+                    <input type="password" id="adminPassword" required>
+                    <label for="adminPassword">Mot de passe</label>
+                </div>
+
+                <button type="submit">Se connecter</button>
+                <p id="loginMessage"></p>
+            </form>
+        </div>
+
+        <div class="dashboard" id="dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <span class="section-label">Administration</span>
+                    <h2>Liste des inscrits</h2>
+                    <p>Consultez les inscriptions enregistrées pour Parajuna 2026.</p>
+                </div>
+
+                <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span id="totalCount">0</span>
+                    <p>Total inscrits</p>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom complet</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Profession</th>
+                            <th>Programme</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inscriptionsTable">
+                        <tr>
+                            <td colspan="6">Aucune donnée chargée.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="dashboardMessage"></p>
+        </div>
+    </section>
+</main>
+
+<script src="admin.js"></script>
+</body>
+</html>

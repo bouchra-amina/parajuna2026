@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Parajuna 2025</title>
+    <link rel="stylesheet" href="registerparajuna.css">
+</head>
+<body>
+
+<main class="container">
+
+    <!-- PARTIE GAUCHE -->
+    <section class="left">
+        <div class="title-box">
+            <h1>PARAJUNA 2025</h1>
+        </div>
+
+        <p>Rejoignez un événement médical d'exception dédié à l'apprentissage, à l'innovation et au partage d'expertise.</p>
+    </section>
+
+    <!-- PARTIE DROITE -->
+    <section class="right">
+        <form id="registerForm" action="#" method="post">
+            <h2>Inscription</h2>
+
+            <div class="input-group">
+                <input type="text" id="name" name="name" autocomplete="name" required>
+                <label for="name">Nom complet</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" autocomplete="email" required>
+                <label for="email">Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+                <label for="phone">Téléphone</label>
+            </div>
+
+            <div class="input-group">
+                <select id="profession" name="profession" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="medecin">Médecine</option>
+                    <option value="dentaire">dentaire</option>
+                    <option value="pharmacie">pharmacie</option>
+                    <option value="autre">Autre</option>
+                </select>
+                <label for="profession">Profession</label>
+            </div>
+
+            <div class="input-group">
+                <select id="program" name="program" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="conferences">Conférences</option>
+                    <option value="ateliers">Ateliers</option>
+                    <option value="simulations">Simulations</option>
+                    <option value="recherche">Recherche</option>
+                </select>
+                <label for="program">Programme</label>
+            </div>
+
+            <button type="submit">Valider l'inscription</button>
+
+            <p id="message" aria-live="polite"></p>
+        </form>
+    </section>
+
+</main>
+
+<script src="registerparajuna.js"></script>
+</body>
+</html>

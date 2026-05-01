@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --primary: #ff7b00;
+    --primary-dark: #e66a00;
+    --primary-light: #ffb15c;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --bg: #f8fafc;
+    --shadow: 0 20px 45px rgba(15, 23, 42, 0.16);
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* LAYOUT */
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+}
+
+/* PARTIE GAUCHE */
+.left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px;
+    background:
+        radial-gradient(circle at top left, rgba(255, 123, 0, 0.12), transparent 35%),
+        linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+.left h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+.left p {
+    max-width: 560px;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+/* PARTIE DROITE */
+.right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+/* FORMULAIRE */
+form {
+    width: 100%;
+    max-width: 390px;
+    padding: 42px 36px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--primary), #ff9f1c);
+    color: var(--white);
+    box-shadow: var(--shadow);
+}
+
+form h2 {
+    text-align: center;
+    margin-bottom: 28px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* INPUT */
+.input-group {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    height: 48px;
+    padding: 14px 14px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    outline: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--white);
+    font-size: 0.95rem;
+    transition: 0.25s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--white);
+    background: rgba(255, 255, 255, 0.24);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18);
+}
+
+.input-group input::placeholder {
+    color: transparent;
+}
+
+.input-group select option {
+    color: var(--text);
+}
+
+/* LABEL */
+.input-group label {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+    transition: 0.25s ease;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label,
+.input-group select:focus + label,
+.input-group select:valid + label {
+    top: -9px;
+    left: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: var(--white);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+/* BOUTON */
+button {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: #fff7ed;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* MESSAGE */
+#message {
+    min-height: 20px;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: var(--white);
+}
+
+/* ===== CADRE TITRE ORANGE ===== */
+.title-box {
+    display: inline-block;
+    width: fit-content;
+    padding: 22px 42px;
+    margin-bottom: 28px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary), #ff9500);
+    box-shadow: 0 16px 35px rgba(255, 123, 0, 0.28);
+}
+
+.title-box h1 {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.1;
+    color: var(--white);
+    text-align: center;
+    font-weight: 800;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left,
+    .right {
+        padding: 40px 24px;
+    }
+
+    .left {
+        text-align: center;
+        align-items: center;
+    }
+
+    .title-box {
+        margin-inline: auto;
+    }
+
+    form {
+        max-width: 100%;
+    }
+}
