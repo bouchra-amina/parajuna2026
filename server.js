@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
 const path = require("path");
+const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =======================
-// STATIC FILES (frontend)
+// STATIC FILES
 // =======================
 app.use(express.static(__dirname));
 
@@ -39,13 +40,6 @@ const db = mysql.createConnection({
 });
 
 // =======================
-// DEBUG ENV
-// =======================
-console.log("MYSQLHOST =", process.env.MYSQLHOST);
-console.log("MYSQLUSER =", process.env.MYSQLUSER);
-console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
-
-// =======================
 // DB CONNECTION
 // =======================
 db.connect((err) => {
@@ -53,7 +47,18 @@ db.connect((err) => {
         console.error("❌ Database connection error:", err);
         return;
     }
-    console.log("✔ Database connected successfully");
+    console.log("✔ Database connected");
+});
+
+// =======================
+// EMAIL CONFIG
+// =======================
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "sayadbouchraamina@gmail.com",
+        pass: "sayadbouchra22" // ⚠️ remplace ici
+    }
 });
 
 // =======================
@@ -86,16 +91,40 @@ app.post("/api/register", (req, res) => {
     db.query(sql, [name, email, phone, profession, program], (err) => {
         if (err) {
             console.error("❌ SQL ERROR:", err);
-
             return res.status(500).json({
                 success: false,
                 message: "Erreur base de données"
             });
         }
 
+        // =======================
+        // SEND EMAIL
+        // =======================
+        const mailOptions = {
+            from: "Parajuna <uro.junajunior@gmail.com>",
+            to: email,
+            subject: "Confirmation d'inscription - Parajuna",
+            text: `Bonjour ${name},
+
+Votre inscription à Parajuna est confirmée ✔
+
+Programme : ${program}
+Profession : ${profession}
+
+Merci pour votre participation 🙌`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("❌ Email error:", error);
+            } else {
+                console.log("📧 Email envoyé :", info.response);
+            }
+        });
+
         res.json({
             success: true,
-            message: "Inscription enregistrée ✔"
+            message: "Inscription + email envoyés ✔"
         });
     });
 });
@@ -128,7 +157,6 @@ app.get("/api/admin/inscriptions", (req, res) => {
     db.query(sql, (err, results) => {
         if (err) {
             console.error("❌ Error loading data:", err);
-
             return res.status(500).json({
                 success: false,
                 message: "Erreur serveur"
