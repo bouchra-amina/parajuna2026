@@ -16,8 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 📂 AJOUT : Servir les fichiers statiques (CSS, JS, images)
-// Cela permet au navigateur de trouver "parajuna.css", "parajuna.js", etc.
+// 📂 Static files
 app.use(express.static(__dirname));
 
 // ⚠️ DATABASE (Railway MySQL)
@@ -29,6 +28,11 @@ const db = mysql.createConnection({
     port: process.env.MYSQLPORT
 });
 
+// 🔍 DEBUG MYSQL VARIABLES
+console.log("MYSQLHOST =", process.env.MYSQLHOST);
+console.log("MYSQLUSER =", process.env.MYSQLUSER);
+console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
+
 // Connexion DB
 db.connect((err) => {
     if (err) {
@@ -39,7 +43,7 @@ db.connect((err) => {
 });
 
 
-// 🏠 PAGE ACCUEIL (CORRIGÉ : Suppression du "..")
+// 🏠 HOME PAGE
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "parajuna.html"));
 });
@@ -47,6 +51,8 @@ app.get("/", (req, res) => {
 
 // 📝 INSCRIPTION
 app.post("/api/register", (req, res) => {
+    console.log("📩 INSCRIPTION REÇUE :", req.body);
+
     const { name, email, phone, profession, program } = req.body;
 
     if (!name || !email || !phone || !profession || !program) {
@@ -63,10 +69,11 @@ app.post("/api/register", (req, res) => {
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
         if (err) {
-            console.error("❌ Erreur insertion :", err);
+            console.error("❌ SQL ERROR FULL:", err);
+
             return res.status(500).json({
                 success: false,
-                message: "Erreur lors de l'inscription."
+                message: err.message
             });
         }
 
@@ -121,7 +128,3 @@ app.get("/api/admin/inscriptions", (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Serveur lancé sur port ${PORT}`);
 });
-
-console.log("MYSQLHOST =", process.env.MYSQLHOST);
-console.log("MYSQLUSER =", process.env.MYSQLUSER);
-console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
