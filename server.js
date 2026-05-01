@@ -23,7 +23,7 @@ app.use(express.static(__dirname));
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD,
+    password: process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD,
     database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE,
     port: process.env.MYSQLPORT
 });
