@@ -4,16 +4,22 @@ const mysql = require("mysql2");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
 
+// ✅ PORT RAILWAY (IMPORTANT)
+const PORT = process.env.PORT || 3000;
+
+// 🔐 Admin password
 const ADMIN_PASSWORD = "parajuna2026";
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// 📁 Static files (frontend)
 app.use(express.static(path.join(__dirname, "..")));
 
+// ⚠️ DATABASE (MySQL LOCAL -> attention Railway)
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -21,19 +27,21 @@ const db = mysql.createConnection({
     database: "parajuna_db"
 });
 
+// Connexion DB
 db.connect((err) => {
     if (err) {
-        console.error("Erreur connexion base de données :", err);
+        console.error("❌ Erreur connexion base de données :", err);
         return;
     }
-
-    console.log("Base de données connectée ✔️");
+    console.log("✔ Base de données connectée");
 });
 
+// Home route
 app.get("/", (req, res) => {
-    res.send("Backend Parajuna fonctionne ✔️");
+    res.send("Backend Parajuna fonctionne ✔");
 });
 
+// 📝 INSCRIPTION
 app.post("/api/register", (req, res) => {
     const { name, email, phone, profession, program } = req.body;
 
@@ -45,14 +53,13 @@ app.post("/api/register", (req, res) => {
     }
 
     const sql = `
-        INSERT INTO inscriptions 
-        (name, email, phone, profession, program)
+        INSERT INTO inscriptions (name, email, phone, profession, program)
         VALUES (?, ?, ?, ?, ?)
     `;
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
         if (err) {
-            console.error("Erreur insertion :", err);
+            console.error("❌ Erreur insertion :", err);
             return res.status(500).json({
                 success: false,
                 message: "Erreur lors de l'inscription."
@@ -61,11 +68,12 @@ app.post("/api/register", (req, res) => {
 
         res.json({
             success: true,
-            message: "Inscription enregistrée avec succès."
+            message: "Inscription enregistrée ✔"
         });
     });
 });
 
+// 🔐 ADMIN LOGIN
 app.post("/api/admin/login", (req, res) => {
     const { password } = req.body;
 
@@ -78,19 +86,20 @@ app.post("/api/admin/login", (req, res) => {
 
     res.json({
         success: true,
-        message: "Connexion réussie."
+        message: "Connexion réussie ✔"
     });
 });
 
+// 📋 LISTE INSCRIPTIONS
 app.get("/api/admin/inscriptions", (req, res) => {
-    const sql = "SELECT * FROM inscriptions ORDER BY created_at DESC";
+    const sql = "SELECT * FROM inscriptions ORDER BY id DESC";
 
     db.query(sql, (err, results) => {
         if (err) {
-            console.error("Erreur chargement inscriptions :", err);
+            console.error("❌ Erreur chargement :", err);
             return res.status(500).json({
                 success: false,
-                message: "Erreur lors du chargement des inscriptions."
+                message: "Erreur serveur"
             });
         }
 
@@ -101,6 +110,7 @@ app.get("/api/admin/inscriptions", (req, res) => {
     });
 });
 
+// 🚀 START SERVER
 app.listen(PORT, () => {
-    console.log(`Serveur lancé sur http://localhost:${PORT}`);
+    console.log(`🚀 Serveur lancé sur port ${PORT}`);
 });
