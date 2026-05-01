@@ -16,9 +16,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "parajuna.html"));
-});
+// 📂 AJOUT : Servir les fichiers statiques (CSS, JS, images)
+// Cela permet au navigateur de trouver "parajuna.css", "parajuna.js", etc.
+app.use(express.static(__dirname));
 
 // ⚠️ DATABASE (Railway MySQL)
 const db = mysql.createConnection({
@@ -39,9 +39,9 @@ db.connect((err) => {
 });
 
 
-// 🏠 PAGE ACCUEIL (ouvre ton HTML)
+// 🏠 PAGE ACCUEIL (CORRIGÉ : Suppression du "..")
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "parajuna.html"));
+    res.sendFile(path.join(__dirname, "parajuna.html"));
 });
 
 
