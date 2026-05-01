@@ -121,3 +121,7 @@ app.get("/api/admin/inscriptions", (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Serveur lancé sur port ${PORT}`);
 });
+
+console.log("MYSQLHOST =", process.env.MYSQLHOST);
+console.log("MYSQLUSER =", process.env.MYSQLUSER);
+console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
