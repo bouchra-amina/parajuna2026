@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "parajuna.html"));
+    res.sendFile(path.join(__dirname, "parajuna.html"));
 });
 
 // ⚠️ DATABASE (Railway MySQL)
