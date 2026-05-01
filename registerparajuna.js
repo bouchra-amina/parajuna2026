@@ -16,6 +16,7 @@ form.addEventListener("submit", async function(e) {
     const profession = professionInput.value;
     const program = programInput.value;
 
+    // validation
     if (!name || !email || !phone || !profession || !program) {
         message.style.color = "#ff4d4d";
         message.textContent = "Veuillez remplir tous les champs.";
@@ -29,17 +30,17 @@ form.addEventListener("submit", async function(e) {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch("/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone,
-                profession: profession,
-                program: program
+                name,
+                email,
+                phone,
+                profession,
+                program
             })
         });
 
@@ -47,7 +48,7 @@ form.addEventListener("submit", async function(e) {
 
         if (result.success) {
             message.style.color = "#00ff99";
-            message.textContent = "Inscription réussie et enregistrée.";
+            message.textContent = "Inscription réussie ✔";
             form.reset();
         } else {
             message.style.color = "#ff4d4d";
@@ -56,7 +57,7 @@ form.addEventListener("submit", async function(e) {
 
     } catch (error) {
         message.style.color = "#ff4d4d";
-        message.textContent = "Erreur : serveur non connecté.";
+        message.textContent = "Erreur serveur.";
         console.error(error);
     }
 });
