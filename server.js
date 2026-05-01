@@ -47,11 +47,11 @@ app.post("/api/register", (req, res) => {
     const { name, email, phone, profession, program } = req.body;
 
     if (!name || !email || !phone || !profession || !program) {
-        return res.status(400).json({
-            success: false,
-            message: "Veuillez remplir tous les champs."
-        });
-    }
+    return res.status(400).json({
+        success: false,
+        message: "Veuillez remplir tous les champs."
+    });
+ }
 
     const sql = `
         INSERT INTO inscriptions (name, email, phone, profession, program)
