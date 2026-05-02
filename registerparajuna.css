@@ -1,303 +1,51 @@
-/* ===================== RESET ===================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* ===================== THEME ===================== */
-:root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #60a5fa;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --white: #ffffff;
-    --bg: #f8fafc;
-}
-
-/* ===================== BODY ===================== */
-body {
-    min-height: 100vh;
-    background: var(--bg);
-    overflow-x: hidden;
-}
-
-/* 🌌 PARTICLES FLOATING (BONUS 1) */
-body::before {
-    content: "";
+/* ===================== POPUP ===================== */
+.popup {
     position: fixed;
     inset: 0;
-    pointer-events: none;
-    z-index: 0;
-
-    background:
-        radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 2px),
-        radial-gradient(circle, rgba(147,197,253,0.6) 1px, transparent 2px),
-        radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 2px);
-
-    background-size: 200px 200px, 300px 300px, 400px 400px;
-
-    animation: floatParticles 60s linear infinite;
-    opacity: 0.6;
-}
-
-/* ===================== CONTAINER ===================== */
-.container {
-    min-height: 100vh;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-
-    background: linear-gradient(135deg, #020617, #0f172a, #1d4ed8);
-}
-
-/* ===================== STARS LAYER 1 ===================== */
-.container::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        radial-gradient(circle, #ffffff 1px, transparent 1.5px),
-        radial-gradient(circle, rgba(147, 197, 253, 0.9) 1px, transparent 1.5px);
-
-    background-size: 120px 120px, 180px 180px;
-    background-position: 0 0, 40px 60px;
-
-    animation: starsMoveSlow 120s linear infinite;
-    opacity: 0.7;
-    z-index: 0;
-}
-
-/* ===================== STARS LAYER 2 ===================== */
-.container::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        radial-gradient(circle, #ffffff 2px, transparent 3px),
-        radial-gradient(circle, #93c5fd 2px, transparent 3px);
-
-    background-size: 300px 300px, 420px 420px;
-    background-position: 60px 80px, 200px 150px;
-
-    animation: starsMoveFast 60s linear infinite;
-    opacity: 0.9;
-    z-index: 0;
-}
-
-/* ===================== LEFT ===================== */
-.left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 80px;
-    position: relative;
-    z-index: 2;
-
-    background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 40%),
-        linear-gradient(135deg, #ffffff, #f1f5f9);
-}
-
-.left h1 {
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    margin-bottom: 20px;
-}
-
-.left p {
-    max-width: 560px;
-    font-size: 1.1rem;
-    color: var(--muted);
-}
-
-/* ===================== RIGHT ===================== */
-.right {
-    flex: 1;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 60px;
-    position: relative;
-    z-index: 2;
+    z-index: 999;
 }
 
-/* ===================== FORM (ULTRA GLASS + GLOW) ===================== */
-form {
-    width: 100%;
-    max-width: 390px;
-    padding: 42px 36px;
+.hidden {
+    display: none;
+}
+
+.popup-content {
+    width: 90%;
+    max-width: 380px;
+    padding: 30px;
     border-radius: 18px;
 
-    background: rgba(29, 78, 216, 0.18);
+    background: rgba(29, 78, 216, 0.25);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255,255,255,0.25);
 
     box-shadow:
-        0 0 60px rgba(37, 99, 235, 0.35),
-        0 20px 45px rgba(0, 0, 0, 0.3);
+        0 0 60px rgba(37,99,235,0.4),
+        0 20px 50px rgba(0,0,0,0.4);
 
-    color: var(--white);
-    position: relative;
-    overflow: hidden;
+    color: white;
+    text-align: center;
 
-    transition: 0.3s ease;
+    animation: pop 0.3s ease;
 }
 
-/* FORM HOVER (GLOW BOOST) */
-form:hover {
-    transform: translateY(-5px);
-    box-shadow:
-        0 0 80px rgba(37, 99, 235, 0.55),
-        0 30px 60px rgba(0, 0, 0, 0.4);
-}
-
-/* ===================== NEBULA INSIDE FORM ===================== */
-form::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background:
-        radial-gradient(circle at 20% 20%, rgba(147, 197, 253, 0.25), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.25), transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 60%);
-
-    z-index: 0;
-}
-
-form * {
-    position: relative;
-    z-index: 1;
-}
-
-/* ===================== INPUT GROUP ===================== */
-.input-group {
-    position: relative;
-    margin-bottom: 22px;
-}
-
-.input-group input,
-.input-group select {
-    width: 100%;
-    height: 48px;
-    padding: 14px 14px 6px;
-    border-radius: 10px;
-
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    color: var(--white);
-
-    transition: 0.3s ease;
-}
-
-/* INPUT HOVER GLOW */
-.input-group input:hover,
-.input-group select:hover {
-    box-shadow: 0 0 15px rgba(147, 197, 253, 0.3);
-}
-
-/* INPUT FOCUS GLOW */
-.input-group input:focus,
-.input-group select:focus {
-    background: rgba(255, 255, 255, 0.22);
-    box-shadow:
-        0 0 0 4px rgba(147, 197, 253, 0.25),
-        0 0 20px rgba(59, 130, 246, 0.3);
-    border-color: #fff;
-    outline: none;
-}
-
-/* FLOAT LABEL */
-.input-group label {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.9);
-    transition: 0.25s ease;
-    pointer-events: none;
-}
-
-.input-group input:focus + label,
-.input-group input:valid + label,
-.input-group select:focus + label,
-.input-group select:valid + label {
-    top: -9px;
-    left: 12px;
-    font-size: 0.72rem;
-    background: #ffffff;
-    color: var(--primary);
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-}
-
-/* ===================== BUTTON ===================== */
-button {
-    width: 100%;
-    height: 48px;
-    border: none;
-    border-radius: 999px;
-
-    background: #ffffff;
-    color: var(--primary);
-
-    font-weight: 700;
-    cursor: pointer;
-
-    transition: 0.3s ease;
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
-}
-
-button:hover {
-    transform: translateY(-2px);
-    background: #dbeafe;
-    box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
-}
-
-/* ===================== ANIMATIONS ===================== */
-
-/* étoiles lentes */
-@keyframes starsMoveSlow {
-    from { transform: translateY(0); }
-    to { transform: translateY(-200px); }
-}
-
-/* étoiles rapides */
-@keyframes starsMoveFast {
-    from { transform: translateY(0); }
-    to { transform: translateY(-120px); }
-}
-
-/* particules flottantes */
-@keyframes floatParticles {
-    from { transform: translateY(0); }
-    to { transform: translateY(-300px); }
-}
-
-/* ===================== RESPONSIVE ===================== */
-@media (max-width: 900px) {
-    .container {
-        flex-direction: column;
+@keyframes pop {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
     }
-
-    .left, .right {
-        padding: 40px 24px;
+    to {
+        transform: scale(1);
+        opacity: 1;
     }
+}
 
-    .left {
-        text-align: center;
-        align-items: center;
-    }
-
-    form {
-        max-width: 100%;
-    }
+.popup-content button {
+    margin-top: 15px;
 }
