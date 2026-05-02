@@ -5,22 +5,52 @@
 }
 
 :root {
-    --primary: #ff7b00;
-    --primary-light: #ffb35c;
-    --text: #1f2937;
-    --muted: #6b7280;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #60a5fa;
+    --text: #ffffff; /* Texte clair pour fond sombre */
+    --text-dark: #1f2937; /* Pour l'intérieur des cartes blanches */
+    --muted: #94a3b8;
     --white: #ffffff;
-    --bg: #f8fafc;
-    --danger: #ef4444;
-    --success: #10b981;
-    --shadow: 0 20px 45px rgba(15, 23, 42, 0.16);
+    --bg-dark: #020617;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
 }
 
 body {
     min-height: 100vh;
-    background: var(--bg);
     color: var(--text);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: 
+        radial-gradient(circle at 10% 15%, rgba(255, 255, 255, .15), transparent 28%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, .1), transparent 30%),
+        linear-gradient(135deg, #020617, #0f172a, #1d4ed8, #3b82f6);
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+/* --- ANIMATION ÉTOILES (Fond Spatial) --- */
+body::before, body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+body::before {
+    background-image: 
+        radial-gradient(circle, #fff 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1.5px);
+    background-size: 120px 120px, 180px 180px;
+    animation: starsMove 60s linear infinite;
+    opacity: 0.6;
+}
+
+body::after {
+    background-image: radial-gradient(circle, #fff 1.5px, transparent 2px);
+    background-size: 300px 300px;
+    animation: twinkle 4s ease-in-out infinite alternate;
 }
 
 .admin-page {
@@ -28,20 +58,16 @@ body {
     display: flex;
 }
 
+/* --- PANNEAU GAUCHE (Logo/Titre) --- */
 .admin-left {
     flex: 0.8;
     padding: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.24), transparent 30%),
-        linear-gradient(135deg, var(--primary), #ff9f1c);
-}
-
-.brand-box {
-    color: var(--white);
-    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--glass-border);
 }
 
 .brand-box h1 {
@@ -49,13 +75,12 @@ body {
     line-height: 1;
     margin-bottom: 18px;
     font-weight: 900;
+    background: linear-gradient(to bottom, #fff, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.brand-box p {
-    font-size: 1.15rem;
-    opacity: 0.9;
-}
-
+/* --- PANNEAU DROIT (Login / Dashboard) --- */
 .admin-right {
     flex: 1.4;
     padding: 60px;
@@ -64,222 +89,94 @@ body {
     justify-content: center;
 }
 
-.login-card,
-.dashboard {
+.login-card, .dashboard {
     width: 100%;
     max-width: 980px;
-    background: var(--white);
-    border-radius: 20px;
+    background: var(--white); /* Gardé blanc pour une lisibilité max des données */
+    border-radius: 24px;
     padding: 42px;
     box-shadow: var(--shadow);
+    color: var(--text-dark); /* Texte sombre sur fond blanc */
 }
 
 .login-card {
     max-width: 430px;
+    background: rgba(255, 255, 255, 0.95);
 }
 
-.login-card h2,
-.dashboard h2 {
-    margin-bottom: 10px;
-    font-size: 2rem;
-}
-
-.login-card > p,
-.dashboard-header p {
-    color: var(--muted);
-    margin-bottom: 28px;
-}
-
-.input-group {
-    position: relative;
-    margin-bottom: 22px;
-}
-
+/* --- INPUTS --- */
 .input-group input {
     width: 100%;
     height: 48px;
-    padding: 14px 14px 6px;
+    padding: 14px;
     border: 1px solid #e5e7eb;
-    outline: none;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #f9fafb;
-    color: var(--text);
-    font-size: 0.95rem;
-    transition: 0.25s ease;
+    transition: 0.25s;
 }
 
 .input-group input:focus {
     border-color: var(--primary);
-    background: var(--white);
-    box-shadow: 0 0 0 4px rgba(255, 123, 0, 0.14);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
-.input-group label {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    font-size: 0.9rem;
-    color: var(--muted);
-    pointer-events: none;
-    transition: 0.25s ease;
-}
-
-.input-group input:focus + label,
-.input-group input:valid + label {
-    top: -9px;
-    left: 12px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    background: var(--white);
-    color: var(--primary);
-    padding: 2px 8px;
-    border-radius: 999px;
-}
-
-button {
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.login-card button,
-.logout-btn {
-    min-height: 46px;
+/* --- BOUTONS --- */
+button, .login-card button, .logout-btn {
+    min-height: 48px;
     padding: 0 24px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--primary), #ff9f1c);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
     font-weight: 800;
-    transition: 0.25s ease;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
-.login-card button {
-    width: 100%;
-}
-
-.login-card button:hover,
-.logout-btn:hover {
+button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(255, 123, 0, 0.24);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
 }
 
-#loginMessage,
-#dashboardMessage {
-    margin-top: 16px;
-    text-align: center;
-    font-size: 0.92rem;
-}
-
-.dashboard {
-    display: none;
-}
-
-.dashboard.active {
-    display: block;
-}
-
-.dashboard-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 28px;
-}
-
-.section-label {
-    display: inline-block;
-    margin-bottom: 12px;
-    padding: 7px 16px;
-    border-radius: 999px;
-    background: rgba(255, 123, 0, 0.12);
-    color: var(--primary);
-    font-size: 0.82rem;
-    font-weight: 800;
-}
-
-.stats {
-    display: grid;
-    grid-template-columns: 180px;
-    gap: 18px;
-    margin-bottom: 24px;
-}
-
+/* --- STATISTIQUES --- */
 .stat-card {
     padding: 20px;
     border-radius: 16px;
-    background: #fff7ed;
-    border: 1px solid rgba(255, 123, 0, 0.18);
+    background: #eff6ff; /* Bleu très léger */
+    border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
 .stat-card span {
-    display: block;
     color: var(--primary);
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 900;
 }
 
-.stat-card p {
-    color: var(--muted);
-    font-size: 0.92rem;
-}
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-}
-
-table {
-    width: 100%;
-    min-width: 820px;
-    border-collapse: collapse;
-    background: var(--white);
-}
-
+/* --- TABLEAU --- */
 thead {
-    background: #fff7ed;
-}
-
-th,
-td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 0.92rem;
+    background: #f8fafc;
 }
 
 th {
     color: var(--primary);
-    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
 }
 
-td {
-    color: var(--text);
+/* --- ANIMATIONS CORE --- */
+@keyframes starsMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120px); }
 }
 
-tbody tr:hover {
-    background: #f9fafb;
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
 }
 
+/* --- RESPONSIVE --- */
 @media (max-width: 950px) {
-    .admin-page {
-        flex-direction: column;
-    }
-
-    .admin-left {
-        padding: 50px 24px;
-    }
-
-    .admin-right {
-        padding: 32px 20px;
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-    }
-
-    .logout-btn {
-        width: 100%;
-    }
+    .admin-page { flex-direction: column; }
+    .admin-left { border-right: none; border-bottom: 1px solid var(--glass-border); }
 }
