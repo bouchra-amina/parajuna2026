@@ -18,7 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ FIX IMPORTANT : servir uniquement /public
-app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.static(__dirname));
 
 // =======================
 // DATABASE
@@ -54,7 +55,7 @@ const transporter = nodemailer.createTransport({
 // HOME
 // =======================
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "registerparajuna.html"));
+    res.sendFile(path.join(__dirname, "registerparajuna.html"));
 });
 
 // =======================
