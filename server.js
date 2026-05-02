@@ -3,6 +3,7 @@ const cors = require("cors");
 const mysql = require("mysql2");
 const path = require("path");
 const nodemailer = require("nodemailer");
+
 const app = express();
 
 // =======================
@@ -23,12 +24,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =======================
-// STATIC FILES (frontend)
+// STATIC FILES
 // =======================
 app.use(express.static(__dirname));
 
 // =======================
-// DATABASE (Railway MySQL)
+// DATABASE
 // =======================
 const db = mysql.createConnection({
     host: process.env.MYSQLHOST,
@@ -39,14 +40,14 @@ const db = mysql.createConnection({
 });
 
 // =======================
-// DEBUG ENV
+// DEBUG
 // =======================
 console.log("MYSQLHOST =", process.env.MYSQLHOST);
 console.log("MYSQLUSER =", process.env.MYSQLUSER);
 console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
 
 // =======================
-// DB CONNECTION
+// DB CONNECT
 // =======================
 db.connect((err) => {
     if (err) {
@@ -55,6 +56,7 @@ db.connect((err) => {
     }
     console.log("✔ Database connected successfully");
 });
+
 // =======================
 // EMAIL CONFIG
 // =======================
@@ -62,18 +64,19 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: "sayadbouchraamina@gmail.com",
-        pass: "bouchra22" // ⚠️ remplace ici
+        pass: "bouchra22" // ⚠️ App password recommandé
     }
 });
+
 // =======================
-// HOME ROUTE
+// HOME
 // =======================
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "parajuna.html"));
 });
 
 // =======================
-// REGISTER USER
+// REGISTER
 // =======================
 app.post("/api/register", (req, res) => {
     console.log("📩 NEW REGISTER:", req.body);
@@ -93,45 +96,44 @@ app.post("/api/register", (req, res) => {
     `;
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
-    if (err) {
-        console.error("❌ SQL ERROR:", err);
+        if (err) {
+            console.error("❌ SQL ERROR:", err);
+            return res.status(500).json({
+                success: false,
+                message: "Erreur base de données"
+            });
+        }
 
-        return res.status(500).json({
-            success: false,
-            message: "Erreur base de données"
-        });
-    }
+        // =======================
+        // EMAIL SEND
+        // =======================
+        const mailOptions = {
+            from: "Parajuna <sayadbouchraamina@gmail.com>",
+            to: email,
+            subject: "Confirmation d'inscription - Parajuna",
+            text: `Bonjour ${name},
 
-    // =======================
-    // 📧 EMAIL CONFIRMATION
-    // =======================
-    const mailOptions = {
-        from: "Parajuna <uro.junajunior@gmail.com>",
-        to: email,
-        subject: "Confirmation d'inscription - Parajuna",
-        text: `Bonjour ${name},
-
-Votre inscription à Parajuna est confirmée ✔
+Votre inscription est confirmée ✔
 
 Programme : ${program}
 Profession : ${profession}
 
-Merci pour votre participation 🙌`
-    };
+Merci 🙌`
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.error("❌ Email error:", error);
-        } else {
-            console.log("📧 Email envoyé :", info.response);
-        }
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("❌ Email error:", error);
+            } else {
+                console.log("📧 Email envoyé :", info.response);
+            }
+        });
+
+        return res.json({
+            success: true,
+            message: "Inscription + email envoyés ✔"
+        });
     });
-
-     res.json({
-        success: true,
-        message: "Inscription + email envoyés ✔"
-     });
-  });
 });
 
 // =======================
@@ -154,7 +156,7 @@ app.post("/api/admin/login", (req, res) => {
 });
 
 // =======================
-// GET ALL INSCRIPTIONS
+// GET INSCRIPTIONS
 // =======================
 app.get("/api/admin/inscriptions", (req, res) => {
     const sql = "SELECT * FROM inscriptions ORDER BY id DESC";
@@ -162,7 +164,6 @@ app.get("/api/admin/inscriptions", (req, res) => {
     db.query(sql, (err, results) => {
         if (err) {
             console.error("❌ Error loading data:", err);
-
             return res.status(500).json({
                 success: false,
                 message: "Erreur serveur"
