@@ -10,7 +10,7 @@
 
 <main class="container">
 
-    <!-- PARTIE GAUCHE -->
+    <!-- LEFT -->
     <section class="left">
         <div class="title-box">
             <h1>PARAJUNA 2025</h1>
@@ -19,55 +19,65 @@
         <p>Rejoignez un événement médical d'exception dédié à l'apprentissage, à l'innovation et au partage d'expertise.</p>
     </section>
 
-    <!-- PARTIE DROITE -->
+    <!-- RIGHT -->
     <section class="right">
-        <form id="registerForm" action="#" method="post">
+        <form id="registerForm">
+
             <h2>Inscription</h2>
 
             <div class="input-group">
-                <input type="text" id="name" name="name" autocomplete="name" required>
-                <label for="name">Nom complet</label>
+                <input type="text" id="name" required>
+                <label>Nom complet</label>
             </div>
 
             <div class="input-group">
-                <input type="email" id="email" name="email" autocomplete="email" required>
-                <label for="email">Email</label>
+                <input type="email" id="email" required>
+                <label>Email</label>
             </div>
 
             <div class="input-group">
-                <input type="tel" id="phone" name="phone" autocomplete="tel" required>
-                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" required>
+                <label>Téléphone</label>
             </div>
 
             <div class="input-group">
-                <select id="profession" name="profession" required>
-                    <option value="" disabled selected hidden></option>
+                <select id="profession" required>
+                    <option value="" hidden></option>
                     <option value="medecin">Médecine</option>
-                    <option value="dentaire">dentaire</option>
-                    <option value="pharmacie">pharmacie</option>
+                    <option value="dentaire">Dentaire</option>
+                    <option value="pharmacie">Pharmacie</option>
                     <option value="autre">Autre</option>
                 </select>
-                <label for="profession">Profession</label>
+                <label>Profession</label>
             </div>
 
             <div class="input-group">
-                <select id="program" name="program" required>
-                    <option value="" disabled selected hidden></option>
+                <select id="program" required>
+                    <option value="" hidden></option>
                     <option value="conferences">Conférences</option>
                     <option value="ateliers">Ateliers</option>
                     <option value="simulations">Simulations</option>
                     <option value="recherche">Recherche</option>
                 </select>
-                <label for="program">Programme</label>
+                <label>Programme</label>
             </div>
 
             <button type="submit">Valider l'inscription</button>
 
-            <p id="message" aria-live="polite"></p>
+            <p id="message"></p>
         </form>
     </section>
 
 </main>
+
+<!-- 🌌 POPUP MODAL -->
+<div id="popup" class="popup hidden">
+    <div class="popup-content">
+        <h2>🎉 Inscription réussie</h2>
+        <p id="popupText"></p>
+        <button id="closePopup">OK</button>
+    </div>
+</div>
 
 <script src="registerparajuna.js"></script>
 </body>
