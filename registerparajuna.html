@@ -10,55 +10,55 @@
 
 <main class="container">
 
-    <!-- PARTIE GAUCHE -->
+    <!-- PARTIE GAUCHE (Optionnelle, peut être masquée en CSS) -->
     <section class="left">
         <div class="title-box">
             <h1>PARAJUNA 2025</h1>
         </div>
-
-        <p>Rejoignez un événement médical d'exception dédié à l'apprentissage, à l'innovation et au partage d'expertise.</p>
+        <p>Rejoignez un événement médical d'exception dédié à l'apprentissage et à l'innovation.</p>
     </section>
 
-    <!-- PARTIE DROITE -->
+    <!-- PARTIE DROITE : LE FORMULAIRE -->
     <section class="right">
         <form id="registerForm" action="#" method="post">
             <h2>Inscription</h2>
 
+            <!-- L'ordre est maintenant : LABEL puis INPUT -->
             <div class="input-group">
-                <input type="text" id="name" name="name" autocomplete="name" required>
                 <label for="name">Nom complet</label>
+                <input type="text" id="name" name="name" autocomplete="name" placeholder="Votre nom" required>
             </div>
 
             <div class="input-group">
-                <input type="email" id="email" name="email" autocomplete="email" required>
                 <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="exemple@mail.com" required>
             </div>
 
             <div class="input-group">
-                <input type="tel" id="phone" name="phone" autocomplete="tel" required>
                 <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="0600000000" required>
             </div>
 
             <div class="input-group">
+                <label for="profession">Profession</label>
                 <select id="profession" name="profession" required>
-                    <option value="" disabled selected hidden></option>
+                    <option value="" disabled selected hidden>Choisir...</option>
                     <option value="medecin">Médecine</option>
-                    <option value="dentaire">dentaire</option>
-                    <option value="pharmacie">pharmacie</option>
+                    <option value="dentaire">Dentaire</option>
+                    <option value="pharmacie">Pharmacie</option>
                     <option value="autre">Autre</option>
                 </select>
-                <label for="profession">Profession</label>
             </div>
 
             <div class="input-group">
+                <label for="program">Programme</label>
                 <select id="program" name="program" required>
-                    <option value="" disabled selected hidden></option>
+                    <option value="" disabled selected hidden>Choisir...</option>
                     <option value="conferences">Conférences</option>
                     <option value="ateliers">Ateliers</option>
                     <option value="simulations">Simulations</option>
                     <option value="recherche">Recherche</option>
                 </select>
-                <label for="program">Programme</label>
             </div>
 
             <button type="submit">Valider l'inscription</button>
@@ -68,6 +68,14 @@
     </section>
 
 </main>
+
+<!-- Popup de succès (vérifie que ton JS utilise bien ces IDs) -->
+<div id="popup" class="hidden">
+    <div class="popup-content">
+        <p id="popupText"></p>
+        <button id="closePopup">Génial !</button>
+    </div>
+</div>
 
 <script src="registerparajuna.js"></script>
 </body>
