@@ -1,4 +1,181 @@
+/* Importation des variables de l'accueil */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #60a5fa;
+    --white: #ffffff;
+    --bg-dark: #020617;
+    --glass: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    /* Fond identique à l'accueil */
+    background: 
+        radial-gradient(circle at 10% 15%, rgba(255, 255, 255, .15), transparent 28%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, .1), transparent 30%),
+        linear-gradient(135deg, #020617, #0f172a, #1d4ed8, #3b82f6);
+    background-attachment: fixed;
+}
+
+/* --- EFFETS D'ÉTOILES (Animation de l'accueil) --- */
+body::before, body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+body::before {
+    background-image: 
+        radial-gradient(circle, #fff 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1.5px);
+    background-size: 120px 120px, 180px 180px;
+    animation: starsMove 60s linear infinite;
+    opacity: 0.6;
+}
+
+body::after {
+    background-image: radial-gradient(circle, #fff 1.5px, transparent 2px);
+    background-size: 300px 300px;
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+/* --- CONTENEUR PRINCIPAL --- */
+.container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+    z-index: 10;
+}
+
+/* --- CARTE GLASSMORPHISM --- */
+.right {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: slideUp 0.8s ease-out;
+}
+
+h2 {
+    color: var(--white);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* --- GROUPES D'ENTRÉE --- */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--white);
+    border: none;
+    border-radius: 999px; /* Style arrondi de ton image */
+    font-size: 0.95rem;
+    color: #333;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.input-group input:focus {
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.4);
+}
+
+/* --- BOUTON VALIDER --- */
+button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 999px;
+    background: #00f2ff; /* Couleur Cyan vibrante de ton image */
+    color: #003366;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0, 242, 255, 0.3);
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 242, 255, 0.5);
+    background: #fff;
+}
+
+/* --- MESSAGE D'ERREUR/SUCCÈS --- */
+#message {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* --- SECTION GAUCHE (Optionnelle, masquée sur petit écran) --- */
+.left {
+    display: none; /* On se concentre sur le formulaire comme sur ton image */
+}
+
+/* --- ANIMATIONS --- */
+@keyframes starsMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120px); }
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+    .right {
+        padding: 30px 20px;
+    }
+    h2 {
+        font-size: 1.6rem;
+    }
+}
 .popup {
     position: fixed;
     inset: 0;
