@@ -61,8 +61,8 @@ db.connect((err) => {
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "uro.junajunior@gmail.com",
-        pass: "TON_APP_PASSWORD" // ⚠️ remplace ici
+        user: "sayadbouchraamina@gmail.com",
+        pass: "bouchra22" // ⚠️ remplace ici
     }
 });
 // =======================
@@ -93,20 +93,45 @@ app.post("/api/register", (req, res) => {
     `;
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
-        if (err) {
-            console.error("❌ SQL ERROR:", err);
+    if (err) {
+        console.error("❌ SQL ERROR:", err);
 
-            return res.status(500).json({
-                success: false,
-                message: "Erreur base de données"
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Inscription enregistrée ✔"
+        return res.status(500).json({
+            success: false,
+            message: "Erreur base de données"
         });
+    }
+
+    // =======================
+    // 📧 EMAIL CONFIRMATION
+    // =======================
+    const mailOptions = {
+        from: "Parajuna <uro.junajunior@gmail.com>",
+        to: email,
+        subject: "Confirmation d'inscription - Parajuna",
+        text: `Bonjour ${name},
+
+Votre inscription à Parajuna est confirmée ✔
+
+Programme : ${program}
+Profession : ${profession}
+
+Merci pour votre participation 🙌`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error("❌ Email error:", error);
+        } else {
+            console.log("📧 Email envoyé :", info.response);
+        }
     });
+
+     res.json({
+        success: true,
+        message: "Inscription + email envoyés ✔"
+     });
+  });
 });
 
 // =======================
