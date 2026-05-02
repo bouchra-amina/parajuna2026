@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // =======================
 // STATIC FILES
 // =======================
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));
 
 // =======================
 // DATABASE
