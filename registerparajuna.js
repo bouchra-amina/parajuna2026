@@ -5,9 +5,14 @@ const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const professionInput = document.getElementById("profession");
 const programInput = document.getElementById("program");
+
+const popup = document.getElementById("popup");
+const popupText = document.getElementById("popupText");
+const closePopup = document.getElementById("closePopup");
+
 const message = document.getElementById("message");
 
-form.addEventListener("submit", async function(e) {
+form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const name = nameInput.value.trim();
@@ -47,9 +52,16 @@ form.addEventListener("submit", async function(e) {
         const result = await response.json();
 
         if (result.success) {
-            message.style.color = "#00ff99";
-            message.textContent = "Inscription réussie ✔";
+
+            // reset message inline
+            message.textContent = "";
+
+            // popup success
+            popupText.textContent = `Bienvenue ${name} ✨ votre inscription est réussie !`;
+            popup.classList.remove("hidden");
+
             form.reset();
+
         } else {
             message.style.color = "#ff4d4d";
             message.textContent = result.message || "Erreur lors de l'inscription.";
@@ -60,4 +72,9 @@ form.addEventListener("submit", async function(e) {
         message.textContent = "Erreur serveur.";
         console.error(error);
     }
+});
+
+// fermer popup
+closePopup.addEventListener("click", () => {
+    popup.classList.add("hidden");
 });
