@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
 const path = require("path");
-
+const nodemailer = require("nodemailer");
 const app = express();
 
 // =======================
@@ -55,7 +55,16 @@ db.connect((err) => {
     }
     console.log("✔ Database connected successfully");
 });
-
+// =======================
+// EMAIL CONFIG
+// =======================
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "uro.junajunior@gmail.com",
+        pass: "TON_APP_PASSWORD" // ⚠️ remplace ici
+    }
+});
 // =======================
 // HOME ROUTE
 // =======================
