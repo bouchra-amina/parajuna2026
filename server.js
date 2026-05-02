@@ -55,7 +55,7 @@ const transporter = nodemailer.createTransport({
 // HOME
 // =======================
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "registerparajuna.html"));
+    res.sendFile(path.join(__dirname, "parajuna.html"));
 });
 
 // =======================
