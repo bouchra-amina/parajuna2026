@@ -6,14 +6,8 @@ const nodemailer = require("nodemailer");
 
 const app = express();
 
-// =======================
-// PORT
-// =======================
 const PORT = process.env.PORT || 3000;
 
-// =======================
-// ADMIN PASSWORD
-// =======================
 const ADMIN_PASSWORD = "parajuna2026";
 
 // =======================
@@ -23,9 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// =======================
-// 🔥 FIX IMPORTANT : STATIC FILES PROPRE
-// =======================
+// ✅ FIX IMPORTANT : servir uniquement /public
 app.use(express.static(path.join(__dirname, "public")));
 
 // =======================
@@ -39,16 +31,6 @@ const db = mysql.createConnection({
     port: process.env.MYSQLPORT
 });
 
-// =======================
-// DEBUG
-// =======================
-console.log("MYSQLHOST =", process.env.MYSQLHOST);
-console.log("MYSQLUSER =", process.env.MYSQLUSER);
-console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
-
-// =======================
-// DB CONNECT
-// =======================
 db.connect((err) => {
     if (err) {
         console.error("❌ Database connection error:", err);
@@ -58,7 +40,7 @@ db.connect((err) => {
 });
 
 // =======================
-// EMAIL CONFIG
+// EMAIL
 // =======================
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -69,18 +51,16 @@ const transporter = nodemailer.createTransport({
 });
 
 // =======================
-// HOME ROUTE
+// HOME
 // =======================
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "registerparajuna.html"));
 });
 
 // =======================
-// REGISTER API
+// REGISTER
 // =======================
 app.post("/api/register", (req, res) => {
-    console.log("📩 NEW REGISTER:", req.body);
-
     const { name, email, phone, profession, program } = req.body;
 
     if (!name || !email || !phone || !profession || !program) {
@@ -97,86 +77,43 @@ app.post("/api/register", (req, res) => {
 
     db.query(sql, [name, email, phone, profession, program], (err) => {
         if (err) {
-            console.error("❌ SQL ERROR:", err);
+            console.error(err);
             return res.status(500).json({
                 success: false,
                 message: "Erreur base de données"
             });
         }
 
-        // EMAIL
-        const mailOptions = {
+        transporter.sendMail({
             from: "Parajuna <sayadbouchraamina@gmail.com>",
             to: email,
-            subject: "Confirmation d'inscription - Parajuna",
-            text: `Bonjour ${name},
-
-Votre inscription est confirmée ✔
-
-Programme : ${program}
-Profession : ${profession}
-
-Merci 🙌`
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("❌ Email error:", error);
-            } else {
-                console.log("📧 Email envoyé :", info.response);
-            }
+            subject: "Confirmation inscription",
+            text: `Bonjour ${name}, inscription confirmée ✔`
         });
 
-        return res.json({
-            success: true,
-            message: "Inscription + email envoyés ✔"
-        });
+        res.json({ success: true });
     });
 });
 
 // =======================
-// ADMIN LOGIN
+// ADMIN
 // =======================
 app.post("/api/admin/login", (req, res) => {
-    const { password } = req.body;
-
-    if (password !== ADMIN_PASSWORD) {
-        return res.status(401).json({
-            success: false,
-            message: "Mot de passe incorrect."
-        });
+    if (req.body.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ success: false });
     }
-
-    res.json({
-        success: true,
-        message: "Connexion réussie ✔"
-    });
+    res.json({ success: true });
 });
 
-// =======================
-// GET INSCRIPTIONS
-// =======================
 app.get("/api/admin/inscriptions", (req, res) => {
-    const sql = "SELECT * FROM inscriptions ORDER BY id DESC";
-
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("❌ Error loading data:", err);
-            return res.status(500).json({
-                success: false,
-                message: "Erreur serveur"
-            });
-        }
-
-        res.json({
-            success: true,
-            inscriptions: results
-        });
+    db.query("SELECT * FROM inscriptions ORDER BY id DESC", (err, results) => {
+        if (err) return res.status(500).json({ success: false });
+        res.json({ success: true, inscriptions: results });
     });
 });
 
 // =======================
-// START SERVER
+// START
 // =======================
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
