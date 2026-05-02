@@ -174,7 +174,70 @@ th {
     0% { opacity: 0.3; }
     100% { opacity: 1; }
 }
+/* --- GESTION DE L'AFFICHAGE --- */
 
+/* Cache le dashboard par défaut */
+.dashboard {
+    display: none; 
+}
+
+/* Affiche le dashboard uniquement quand il a la classe 'active' */
+.dashboard.active {
+    display: block;
+}
+
+/* Permet de cacher la carte de login une fois connecté */
+.login-card {
+    max-width: 430px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center; /* Centre tout le texte et le bouton */
+    box-shadow: var(--shadow);
+}
+
+/* Supprime l'espace entre le titre et la description */
+.login-card h2 {
+    margin-bottom: 0; 
+    font-size: 2rem;
+    color: var(--text-dark);
+}
+
+/* Supprime l'espace sous la description et resserre le texte */
+.login-card > p {
+    margin-top: 5px; /* Très léger décalage pour la lisibilité */
+    margin-bottom: 25px; /* Espace avant le champ mot de passe */
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.2; /* Rapproche les lignes de texte */
+}
+
+/* Centrage du bouton */
+.login-card button {
+    display: inline-block; /* Permet le centrage via text-align: center */
+    width: auto;
+    min-width: 200px;
+    margin: 10px auto 0;
+}
+.input-group label {
+    display: block;
+    text-align: left; /* Le label reste à gauche pour le style */
+    margin-bottom: 5px; /* Espace minimal avec l'input */
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 4px; /* Réduit l'espace avec l'input au minimum */
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.input-group input {
+    margin-top: 0; /* Supprime toute marge haute accidentelle */
+}
 /* --- RESPONSIVE --- */
 @media (max-width: 950px) {
     .admin-page { flex-direction: column; }
