@@ -38,7 +38,7 @@ body {
     background: linear-gradient(135deg, #020617, #0f172a, #1d4ed8);
 }
 
-/* ===================== ETOILES (ESPACE ANIME) ===================== */
+/* ===================== ETOILES ANIME ===================== */
 .container::before {
     content: "";
     position: absolute;
@@ -113,17 +113,51 @@ body {
     z-index: 2;
 }
 
-/* ===================== FORM ===================== */
+/* ===================== FORM (GLASS + SPACE NEBULA) ===================== */
 form {
     width: 100%;
     max-width: 390px;
     padding: 42px 36px;
     border-radius: 18px;
-    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+
+    /* 🌌 glass space effect */
+    background: rgba(29, 78, 216, 0.18);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    /* glow spatial */
+    box-shadow:
+        0 0 40px rgba(37, 99, 235, 0.35),
+        0 20px 45px rgba(0, 0, 0, 0.25);
+
     color: var(--white);
-    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
 }
 
+/* 🌌 NEBULA INSIDE FORM (BONUS) */
+form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(circle at 20% 20%, rgba(147, 197, 253, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.25), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 60%);
+
+    z-index: 0;
+}
+
+/* ensure content above nebula */
+form * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===================== TITLE ===================== */
 form h2 {
     text-align: center;
     margin-bottom: 28px;
@@ -221,23 +255,13 @@ button:hover {
 
 /* ===================== ANIMATIONS ===================== */
 @keyframes starsMove {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(-140px);
-    }
+    from { transform: translateY(0); }
+    to { transform: translateY(-140px); }
 }
 
 @keyframes twinkle {
-    0% {
-        opacity: 0.3;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1.06);
-    }
+    0% { opacity: 0.3; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.06); }
 }
 
 /* ===================== RESPONSIVE ===================== */
