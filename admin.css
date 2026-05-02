@@ -1,3 +1,4 @@
+/* --- RESET & VARIABLES --- */
 * {
     margin: 0;
     padding: 0;
@@ -8,14 +9,15 @@
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
     --primary-light: #60a5fa;
-    --text: #ffffff; /* Texte clair pour fond sombre */
-    --text-dark: #1f2937; /* Pour l'intérieur des cartes blanches */
-    --muted: #94a3b8;
+    --text: #ffffff;
+    --text-dark: #1f2937;
+    --muted: #64748b;
     --white: #ffffff;
     --bg-dark: #020617;
     --glass: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
     --shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    --danger: #ef4444;
 }
 
 body {
@@ -30,7 +32,7 @@ body {
     overflow-x: hidden;
 }
 
-/* --- ANIMATION ÉTOILES (Fond Spatial) --- */
+/* --- ANIMATION ÉTOILES --- */
 body::before, body::after {
     content: "";
     position: fixed;
@@ -58,11 +60,12 @@ body::after {
     display: flex;
 }
 
-/* --- PANNEAU GAUCHE (Logo/Titre) --- */
+/* --- PANNEAU GAUCHE --- */
 .admin-left {
     flex: 0.8;
     padding: 70px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
@@ -73,98 +76,202 @@ body::after {
 .brand-box h1 {
     font-size: clamp(2.4rem, 5vw, 4.6rem);
     line-height: 1;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
     font-weight: 900;
     background: linear-gradient(to bottom, #fff, #60a5fa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-/* --- PANNEAU DROIT (Login / Dashboard) --- */
+/* --- PANNEAU DROIT --- */
 .admin-right {
     flex: 1.4;
-    padding: 60px;
+    padding: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.login-card, .dashboard {
-    width: 100%;
-    max-width: 980px;
-    background: var(--white); /* Gardé blanc pour une lisibilité max des données */
-    border-radius: 24px;
-    padding: 42px;
-    box-shadow: var(--shadow);
-    color: var(--text-dark); /* Texte sombre sur fond blanc */
-}
-
+/* --- CARTE DE CONNEXION (Optimisée) --- */
 .login-card {
+    width: 100%;
     max-width: 430px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    color: var(--text-dark);
 }
 
-/* --- INPUTS --- */
+.login-card h2 {
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+.login-card > p {
+    margin-bottom: 25px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
 .input-group input {
     width: 100%;
     height: 48px;
     padding: 14px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
-    background: #f9fafb;
+    background: #f8fafc;
     transition: 0.25s;
 }
 
 .input-group input:focus {
+    outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-/* --- BOUTONS --- */
-button, .login-card button, .logout-btn {
-    min-height: 48px;
-    padding: 0 24px;
+/* --- DASHBOARD & TABLEAU (Le plus gros changement) --- */
+.dashboard {
+    display: none; /* Caché par défaut */
+    width: 100%;
+    max-width: 1100px;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: var(--shadow);
+    color: var(--text-dark);
+    animation: fadeIn 0.5s ease;
+}
+
+.dashboard.active {
+    display: block;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+/* Stats Cards */
+.stat-card {
+    padding: 20px;
+    border-radius: 16px;
+    background: #eff6ff;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    min-width: 200px;
+}
+
+.stat-card span {
+    display: block;
+    color: var(--primary);
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.stat-card p {
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* Table Wrapper pour défilement mobile/petit écran */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px; /* Empêche l'écrasement des colonnes */
+}
+
+th {
+    background: #f8fafc;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 2px solid #edf2f7;
+}
+
+td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9rem;
+    color: #475569;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* --- BADGES ET BOUTONS --- */
+.badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: var(--danger);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-delete:hover {
+    background: var(--danger);
+    color: white;
+}
+
+button, .logout-btn {
+    min-height: 45px;
+    padding: 0 25px;
     border-radius: 999px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--white);
-    font-weight: 800;
-    transition: 0.3s;
+    font-weight: 700;
     border: none;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
 }
 
-/* --- STATISTIQUES --- */
-.stat-card {
-    padding: 20px;
-    border-radius: 16px;
-    background: #eff6ff; /* Bleu très léger */
-    border: 1px solid rgba(37, 99, 235, 0.1);
-}
-
-.stat-card span {
-    color: var(--primary);
-    font-size: 2.2rem;
-    font-weight: 900;
-}
-
-/* --- TABLEAU --- */
-thead {
-    background: #f8fafc;
-}
-
-th {
-    color: var(--primary);
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-}
-
-/* --- ANIMATIONS CORE --- */
+/* --- ANIMATIONS --- */
 @keyframes starsMove {
     from { transform: translateY(0); }
     to { transform: translateY(-120px); }
@@ -174,72 +281,19 @@ th {
     0% { opacity: 0.3; }
     100% { opacity: 1; }
 }
-/* --- GESTION DE L'AFFICHAGE --- */
 
-/* Cache le dashboard par défaut */
-.dashboard {
-    display: none; 
-}
-
-/* Affiche le dashboard uniquement quand il a la classe 'active' */
-.dashboard.active {
-    display: block;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Permet de cacher la carte de login une fois connecté */
-.login-card {
-    max-width: 430px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 24px;
-    padding: 40px;
-    text-align: center; /* Centre tout le texte et le bouton */
-    box-shadow: var(--shadow);
-}
-
-/* Supprime l'espace entre le titre et la description */
-.login-card h2 {
-    margin-bottom: 0; 
-    font-size: 2rem;
-    color: var(--text-dark);
-}
-
-/* Supprime l'espace sous la description et resserre le texte */
-.login-card > p {
-    margin-top: 5px; /* Très léger décalage pour la lisibilité */
-    margin-bottom: 25px; /* Espace avant le champ mot de passe */
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.2; /* Rapproche les lignes de texte */
-}
-
-/* Centrage du bouton */
-.login-card button {
-    display: inline-block; /* Permet le centrage via text-align: center */
-    width: auto;
-    min-width: 200px;
-    margin: 10px auto 0;
-}
-.input-group label {
-    display: block;
-    text-align: left; /* Le label reste à gauche pour le style */
-    margin-bottom: 5px; /* Espace minimal avec l'input */
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 4px; /* Réduit l'espace avec l'input au minimum */
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-.input-group input {
-    margin-top: 0; /* Supprime toute marge haute accidentelle */
-}
 /* --- RESPONSIVE --- */
 @media (max-width: 950px) {
     .admin-page { flex-direction: column; }
-    .admin-left { border-right: none; border-bottom: 1px solid var(--glass-border); }
+    .admin-left { 
+        flex: none; 
+        padding: 40px; 
+        border-right: none; 
+        border-bottom: 1px solid var(--glass-border); 
+    }
 }
