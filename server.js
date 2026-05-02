@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =======================
-// STATIC FILES
+// 🔥 FIX IMPORTANT : STATIC FILES PROPRE
 // =======================
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -64,19 +64,19 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: "sayadbouchraamina@gmail.com",
-        pass: "ujav qgup wquk fjkt" // ⚠️ App password recommandé
+        pass: "ujav qgup wquk fjkt"
     }
 });
 
 // =======================
-// HOME
+// HOME ROUTE
 // =======================
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "parajuna.html"));
+    res.sendFile(path.join(__dirname, "public", "registerparajuna.html"));
 });
 
 // =======================
-// REGISTER
+// REGISTER API
 // =======================
 app.post("/api/register", (req, res) => {
     console.log("📩 NEW REGISTER:", req.body);
@@ -104,9 +104,7 @@ app.post("/api/register", (req, res) => {
             });
         }
 
-        // =======================
-        // EMAIL SEND
-        // =======================
+        // EMAIL
         const mailOptions = {
             from: "Parajuna <sayadbouchraamina@gmail.com>",
             to: email,
