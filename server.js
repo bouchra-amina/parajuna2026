@@ -112,7 +112,27 @@ app.get("/api/admin/inscriptions", (req, res) => {
         res.json({ success: true, inscriptions: results });
     });
 });
+// =======================
+// DELETE INSCRIPTION (AJOUTER CECI)
+// =======================
+app.delete("/api/admin/inscriptions/:id", (req, res) => {
+    const id = req.params.id;
 
+    const sql = "DELETE FROM inscriptions WHERE id = ?";
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Erreur suppression SQL:", err);
+            return res.status(500).json({ success: false, message: "Erreur base de données" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: "Inscrit non trouvé" });
+        }
+
+        res.json({ success: true, message: "Inscrit supprimé avec succès" });
+    });
+});
 // =======================
 // START
 // =======================
