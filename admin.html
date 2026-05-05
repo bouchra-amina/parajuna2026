@@ -9,6 +9,8 @@
 <body>
 
 <main class="admin-page">
+
+    <!-- ================= LEFT ================= -->
     <section class="admin-left">
         <div class="brand-box">
             <h1>PARAJUNA 2026</h1>
@@ -16,7 +18,10 @@
         </div>
     </section>
 
+    <!-- ================= RIGHT ================= -->
     <section class="admin-right">
+
+        <!-- LOGIN -->
         <div class="login-card" id="loginCard">
             <h2>Connexion admin</h2>
             <p>Accédez à la liste des participants inscrits.</p>
@@ -25,7 +30,6 @@
                 <div class="input-group">
                     <label for="adminPassword">Mot de passe</label>
                     <input type="password" id="adminPassword" required>
-                    
                 </div>
 
                 <button type="submit">Se connecter</button>
@@ -33,7 +37,9 @@
             </form>
         </div>
 
+        <!-- ================= DASHBOARD ================= -->
         <div class="dashboard" id="dashboard">
+
             <div class="dashboard-header">
                 <div>
                     <span class="section-label">Administration</span>
@@ -44,6 +50,7 @@
                 <button id="logoutBtn" class="logout-btn">Déconnexion</button>
             </div>
 
+            <!-- ================= STATS ================= -->
             <div class="stats">
                 <div class="stat-card">
                     <span id="totalCount">0</span>
@@ -51,6 +58,16 @@
                 </div>
             </div>
 
+            <!-- ================= SEARCH BAR (NEW) ================= -->
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Rechercher par nom, prénom, email, wilaya, téléphone..."
+                >
+            </div>
+
+            <!-- ================= TABLE ================= -->
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -63,6 +80,7 @@
                             <th>Date</th>
                         </tr>
                     </thead>
+
                     <tbody id="inscriptionsTable">
                         <tr>
                             <td colspan="6">Aucune donnée chargée.</td>
@@ -72,10 +90,11 @@
             </div>
 
             <p id="dashboardMessage"></p>
+
         </div>
     </section>
-</main>
 
+</main>
 
 <script src="admin.js"></script>
 </body>
