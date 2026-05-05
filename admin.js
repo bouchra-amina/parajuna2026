@@ -8,9 +8,19 @@ const inscriptionsTable = document.getElementById("inscriptionsTable");
 const totalCount = document.getElementById("totalCount");
 const dashboardMessage = document.getElementById("dashboardMessage");
 
-// --- LOGIN ADMIN ---
-adminLoginForm.addEventListener("submit", async function(e) {
+/* =========================
+   SEARCH INPUT (NEW)
+========================= */
+const searchInput = document.getElementById("searchInput");
+
+let allInscriptions = [];
+
+/* =========================
+   LOGIN ADMIN
+========================= */
+adminLoginForm.addEventListener("submit", async function (e) {
     e.preventDefault();
+
     const password = adminPassword.value.trim();
 
     if (!password) {
@@ -37,13 +47,15 @@ adminLoginForm.addEventListener("submit", async function(e) {
         loadInscriptions();
 
     } catch (error) {
-        showMessage(loginMessage, "Erreur serveur.", "#ef4444");
         console.error(error);
+        showMessage(loginMessage, "Erreur serveur.", "#ef4444");
     }
 });
 
-// --- LOGOUT ---
-logoutBtn.addEventListener("click", function() {
+/* =========================
+   LOGOUT
+========================= */
+logoutBtn.addEventListener("click", function () {
     localStorage.removeItem("parajunaAdmin");
     dashboard.classList.remove("active");
     loginCard.style.display = "block";
@@ -51,39 +63,48 @@ logoutBtn.addEventListener("click", function() {
     loginMessage.textContent = "";
 });
 
-// --- SHOW DASHBOARD ---
+/* =========================
+   SHOW DASHBOARD
+========================= */
 function showDashboard() {
     loginCard.style.display = "none";
     dashboard.classList.add("active");
 }
 
-// --- LOAD INSCRIPTIONS ---
+/* =========================
+   LOAD INSCRIPTIONS
+========================= */
 async function loadInscriptions() {
     try {
         const response = await fetch("/api/admin/inscriptions");
         const result = await response.json();
 
         if (!result.success) {
-            showMessage(dashboardMessage, result.message || "Erreur de chargement.", "#ef4444");
+            showMessage(dashboardMessage, "Erreur de chargement.", "#ef4444");
             return;
         }
 
-        renderInscriptions(result.inscriptions);
+        allInscriptions = result.inscriptions;
+        renderInscriptions(allInscriptions);
 
     } catch (error) {
-        showMessage(dashboardMessage, "Impossible de charger les inscriptions.", "#ef4444");
         console.error(error);
+        showMessage(dashboardMessage, "Erreur serveur.", "#ef4444");
     }
 }
 
-// --- RENDER TABLE (MISE À JOUR PRO) ---
+/* =========================
+   RENDER TABLE
+========================= */
 function renderInscriptions(inscriptions) {
     totalCount.textContent = inscriptions.length;
 
     if (inscriptions.length === 0) {
         inscriptionsTable.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center; padding: 30px;">Aucune inscription trouvée.</td>
+                <td colspan="6" style="text-align:center; padding: 25px;">
+                    Aucune inscription trouvée.
+                </td>
             </tr>
         `;
         return;
@@ -96,14 +117,14 @@ function renderInscriptions(inscriptions) {
 
         return `
             <tr>
-                <td><strong>${item.name}</strong></td>
-                <td>${item.email}</td>
-                <td>${item.phone}</td>
-                <td><span class="badge">${item.profession}</span></td>
-                <td>${item.program}</td>
+                <td><strong>${item.lastname || ""} ${item.firstname || ""}</strong></td>
+                <td>${item.email || "-"}</td>
+                <td>${item.phone || "-"}</td>
+                <td><span class="badge">${item.profession || "-"}</span></td>
+                <td>${item.program || "-"}</td>
                 <td>${date}</td>
                 <td>
-                    <button class="btn-delete" onclick="deleteInscription('${item._id || item.id}')">
+                    <button class="btn-delete" onclick="deleteInscription('${item.id}')">
                         Supprimer
                     </button>
                 </td>
@@ -112,11 +133,31 @@ function renderInscriptions(inscriptions) {
     }).join("");
 }
 
-// --- DELETE INSCRIPTION (NOUVEAU) ---
+/* =========================
+   SEARCH FILTER (NEW)
+========================= */
+searchInput.addEventListener("input", function () {
+    const value = this.value.toLowerCase().trim();
+
+    const filtered = allInscriptions.filter((item) => {
+        return (
+            (item.lastname && item.lastname.toLowerCase().includes(value)) ||
+            (item.firstname && item.firstname.toLowerCase().includes(value)) ||
+            (item.email && item.email.toLowerCase().includes(value)) ||
+            (item.phone && item.phone.includes(value)) ||
+            (item.profession && item.profession.toLowerCase().includes(value)) ||
+            (item.program && item.program.toLowerCase().includes(value))
+        );
+    });
+
+    renderInscriptions(filtered);
+});
+
+/* =========================
+   DELETE INSCRIPTION
+========================= */
 async function deleteInscription(id) {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cet inscrit ? Cette action est irréversible.")) {
-        return;
-    }
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cet inscrit ?")) return;
 
     try {
         const response = await fetch(`/api/admin/inscriptions/${id}`, {
@@ -126,24 +167,28 @@ async function deleteInscription(id) {
         const result = await response.json();
 
         if (result.success) {
-            // Recharger la liste après suppression
             loadInscriptions();
         } else {
-            alert(result.message || "Erreur lors de la suppression");
+            alert(result.message || "Erreur suppression");
         }
+
     } catch (error) {
-        console.error("Erreur suppression:", error);
-        alert("Erreur de connexion au serveur.");
+        console.error(error);
+        alert("Erreur serveur.");
     }
 }
 
-// --- UTILS ---
+/* =========================
+   MESSAGE
+========================= */
 function showMessage(element, text, color) {
     element.style.color = color;
     element.textContent = text;
 }
 
-// --- AUTO LOGIN ---
+/* =========================
+   AUTO LOGIN
+========================= */
 if (localStorage.getItem("parajunaAdmin") === "connected") {
     showDashboard();
     loadInscriptions();
