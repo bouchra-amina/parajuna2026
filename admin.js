@@ -8,9 +8,7 @@ const inscriptionsTable = document.getElementById("inscriptionsTable");
 const totalCount = document.getElementById("totalCount");
 const dashboardMessage = document.getElementById("dashboardMessage");
 
-/* =========================
-   SEARCH INPUT (NEW)
-========================= */
+/* SEARCH */
 const searchInput = document.getElementById("searchInput");
 
 let allInscriptions = [];
@@ -72,7 +70,7 @@ function showDashboard() {
 }
 
 /* =========================
-   LOAD INSCRIPTIONS
+   LOAD DATA
 ========================= */
 async function loadInscriptions() {
     try {
@@ -94,7 +92,7 @@ async function loadInscriptions() {
 }
 
 /* =========================
-   RENDER TABLE
+   RENDER TABLE (CORRIGÉ)
 ========================= */
 function renderInscriptions(inscriptions) {
     totalCount.textContent = inscriptions.length;
@@ -102,7 +100,7 @@ function renderInscriptions(inscriptions) {
     if (inscriptions.length === 0) {
         inscriptionsTable.innerHTML = `
             <tr>
-                <td colspan="6" style="text-align:center; padding: 25px;">
+                <td colspan="11" style="text-align:center; padding: 25px;">
                     Aucune inscription trouvée.
                 </td>
             </tr>
@@ -117,10 +115,15 @@ function renderInscriptions(inscriptions) {
 
         return `
             <tr>
-                <td><strong>${item.lastname || ""} ${item.firstname || ""}</strong></td>
+                <td>${item.lastname || "-"}</td>
+                <td>${item.firstname || "-"}</td>
                 <td>${item.email || "-"}</td>
                 <td>${item.phone || "-"}</td>
-                <td><span class="badge">${item.profession || "-"}</span></td>
+                <td>${item.filiere || "-"}</td>
+                <td>${item.status || "-"}</td>
+                <td>${item.year || "-"}</td>
+                <td>${item.wilaya || "-"}</td>
+                <td>${item.profession || "-"}</td>
                 <td>${item.program || "-"}</td>
                 <td>${date}</td>
                 <td>
@@ -134,7 +137,7 @@ function renderInscriptions(inscriptions) {
 }
 
 /* =========================
-   SEARCH FILTER (NEW)
+   SEARCH FILTER
 ========================= */
 searchInput.addEventListener("input", function () {
     const value = this.value.toLowerCase().trim();
@@ -145,6 +148,10 @@ searchInput.addEventListener("input", function () {
             (item.firstname && item.firstname.toLowerCase().includes(value)) ||
             (item.email && item.email.toLowerCase().includes(value)) ||
             (item.phone && item.phone.includes(value)) ||
+            (item.filiere && item.filiere.toLowerCase().includes(value)) ||
+            (item.status && item.status.toLowerCase().includes(value)) ||
+            (item.year && item.year.toString().includes(value)) ||
+            (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
             (item.profession && item.profession.toLowerCase().includes(value)) ||
             (item.program && item.program.toLowerCase().includes(value))
         );
@@ -154,7 +161,7 @@ searchInput.addEventListener("input", function () {
 });
 
 /* =========================
-   DELETE INSCRIPTION
+   DELETE
 ========================= */
 async function deleteInscription(id) {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cet inscrit ?")) return;
