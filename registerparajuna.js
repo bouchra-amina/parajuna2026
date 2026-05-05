@@ -1,39 +1,100 @@
 const form = document.getElementById("registerForm");
 
-const nameInput = document.getElementById("name");
+/* =========================
+   INPUTS
+========================= */
+const lastnameInput = document.getElementById("lastname");
+const firstnameInput = document.getElementById("firstname");
 const emailInput = document.getElementById("email");
 const phoneInput = document.getElementById("phone");
 const professionInput = document.getElementById("profession");
+const statusInput = document.getElementById("status");
+const yearInput = document.getElementById("year");
+const wilayaInput = document.getElementById("wilaya");
 const programInput = document.getElementById("program");
 
+/* =========================
+   UI
+========================= */
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
 const closePopup = document.getElementById("closePopup");
-
 const message = document.getElementById("message");
 
+/* =========================
+   HELPERS
+========================= */
+function showError(text) {
+    message.style.color = "#ff4d4d";
+    message.textContent = text;
+}
+
+function showSuccess(text) {
+    message.style.color = "#00ffbf";
+    message.textContent = text;
+}
+
+function clearMessage() {
+    message.textContent = "";
+}
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function isValidPhone(phone) {
+    return /^[0-9+\s]{8,15}$/.test(phone);
+}
+
+/* =========================
+   SUBMIT
+========================= */
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const name = nameInput.value.trim();
+    clearMessage();
+
+    const lastname = lastnameInput.value.trim();
+    const firstname = firstnameInput.value.trim();
     const email = emailInput.value.trim();
     const phone = phoneInput.value.trim();
     const profession = professionInput.value;
+    const status = statusInput.value;
+    const year = yearInput.value;
+    const wilaya = wilayaInput.value;
     const program = programInput.value;
 
-    // validation
-    if (!name || !email || !phone || !profession || !program) {
-        message.style.color = "#ff4d4d";
-        message.textContent = "Veuillez remplir tous les champs.";
+    /* =========================
+       VALIDATION
+    ========================= */
+    if (
+        !lastname ||
+        !firstname ||
+        !email ||
+        !phone ||
+        !profession ||
+        !status ||
+        !year ||
+        !wilaya ||
+        !program
+    ) {
+        showError("Veuillez remplir tous les champs.");
         return;
     }
 
-    if (!email.includes("@")) {
-        message.style.color = "#ff4d4d";
-        message.textContent = "Email invalide.";
+    if (!isValidEmail(email)) {
+        showError("Adresse email invalide.");
         return;
     }
 
+    if (!isValidPhone(phone)) {
+        showError("Numéro de téléphone invalide.");
+        return;
+    }
+
+    /* =========================
+       SEND DATA
+    ========================= */
     try {
         const response = await fetch("/api/register", {
             method: "POST",
@@ -41,10 +102,15 @@ form.addEventListener("submit", async function (e) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name,
+                lastname,
+                firstname,
+                fullName: lastname + " " + firstname,
                 email,
                 phone,
                 profession,
+                status,
+                year,
+                wilaya,
                 program
             })
         });
@@ -53,28 +119,36 @@ form.addEventListener("submit", async function (e) {
 
         if (result.success) {
 
-            // reset message inline
-            message.textContent = "";
+            popupText.textContent =
+                `Bienvenue ${firstname} ${lastname} ✨ Votre inscription est réussie !`;
 
-            // popup success
-            popupText.textContent = `Bienvenue ${name} ✨ votre inscription est réussie !`;
             popup.classList.remove("hidden");
 
             form.reset();
+            clearMessage();
 
         } else {
-            message.style.color = "#ff4d4d";
-            message.textContent = result.message || "Erreur lors de l'inscription.";
+            showError(result.message || "Erreur lors de l'inscription.");
         }
 
     } catch (error) {
-        message.style.color = "#ff4d4d";
-        message.textContent = "Erreur serveur.";
         console.error(error);
+        showError("Erreur serveur, veuillez réessayer.");
     }
 });
 
-// fermer popup
-closePopup.addEventListener("click", () => {
+/* =========================
+   CLOSE POPUP
+========================= */
+closePopup.addEventListener("click", function () {
     popup.classList.add("hidden");
+});
+
+/* =========================
+   CLOSE POPUP CLICK OUTSIDE
+========================= */
+popup.addEventListener("click", function (e) {
+    if (e.target === popup) {
+        popup.classList.add("hidden");
+    }
 });
