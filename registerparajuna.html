@@ -86,11 +86,19 @@
                 </select>
             </div>
 
-            
-
-            <!-- ANNEE  status-->
+            <!-- STATUT -->
             <div class="input-group">
-                <label for="year">Statut/Année de parcours</label>
+                <label for="status">Statut</label>
+                <select id="status" name="status" required>
+                    <option value="" disabled selected hidden>Choisir...</option>
+                    <option value="interne">Interne</option>
+                    <option value="externe">Externe</option>
+                </select>
+            </div>
+
+            <!-- ANNEE -->
+            <div class="input-group" id="yearGroup">
+                <label for="year">Année de parcours</label>
                 <select id="year" name="year" required>
                     <option value="" disabled selected hidden>Choisir...</option>
                     <option value="1">1ère année</option>
@@ -100,7 +108,7 @@
                     <option value="5">5ème année</option>
                     <option value="6">6ème année</option>
                     <option value="9">Interne</option>
-                    <option value="10">Résidant</option>    
+                    <option value="10">Résidant</option>
                     <option value="11">Médecin généraliste</option>
                 </select>
             </div>
@@ -200,6 +208,25 @@
         <button id="closePopup">Génial !</button>
     </div>
 </div>
+
+<script>
+const status = document.getElementById("status");
+const yearGroup = document.getElementById("yearGroup");
+const year = document.getElementById("year");
+
+status.addEventListener("change", function () {
+    if (this.value === "externe") {
+        yearGroup.style.display = "none";
+        year.disabled = true;
+        year.required = false;
+        year.value = "";
+    } else {
+        yearGroup.style.display = "block";
+        year.disabled = false;
+        year.required = true;
+    }
+});
+</script>
 
 <script src="test.js"></script>
 </body>
