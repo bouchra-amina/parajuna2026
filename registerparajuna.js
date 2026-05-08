@@ -10,6 +10,7 @@ const phoneInput = document.getElementById("phone");
 const professionInput = document.getElementById("profession");
 const statusInput = document.getElementById("status");
 const yearInput = document.getElementById("year");
+const yearGroup = document.getElementById("yearGroup");
 const wilayaInput = document.getElementById("wilaya");
 const programInput = document.getElementById("program");
 
@@ -51,15 +52,15 @@ function isValidPhone(phone) {
 ========================= */
 statusInput.addEventListener("change", function () {
 
-    if (statusInput.value === "generaliste") {
+    if (statusInput.value === "externe") {
         yearInput.value = "";
         yearInput.disabled = true;
-        yearInput.style.opacity = "0.5";
-        yearInput.style.cursor = "not-allowed";
+        yearInput.required = false;
+        yearGroup.style.display = "none";
     } else {
         yearInput.disabled = false;
-        yearInput.style.opacity = "1";
-        yearInput.style.cursor = "pointer";
+        yearInput.required = true;
+        yearGroup.style.display = "block";
     }
 
 });
@@ -99,8 +100,8 @@ form.addEventListener("submit", async function (e) {
         return;
     }
 
-    // année obligatoire sauf médecin généraliste
-    if (status !== "generaliste" && !year) {
+    // année obligatoire seulement si interne
+    if (status === "interne" && !year) {
         showError("Veuillez sélectionner l'année.");
         return;
     }
@@ -132,7 +133,7 @@ form.addEventListener("submit", async function (e) {
                 phone,
                 profession,
                 status,
-                year: status === "generaliste" ? null : year,
+                year: status === "externe" ? null : year,
                 wilaya,
                 program
             })
@@ -150,10 +151,10 @@ form.addEventListener("submit", async function (e) {
             form.reset();
             clearMessage();
 
-            // reset year UI
+            // reset année
             yearInput.disabled = false;
-            yearInput.style.opacity = "1";
-            yearInput.style.cursor = "pointer";
+            yearInput.required = true;
+            yearGroup.style.display = "block";
 
         } else {
             showError(result.message || "Erreur lors de l'inscription.");
