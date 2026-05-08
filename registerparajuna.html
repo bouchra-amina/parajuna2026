@@ -6,6 +6,7 @@
     <title>Inscription - Parajuna 2025</title>
     <link rel="stylesheet" href="registerparajuna.css">
 </head>
+
 <body>
 
 <main class="container">
@@ -20,6 +21,7 @@
 
     <!-- PARTIE DROITE -->
     <section class="right">
+
         <form id="registerForm">
 
             <h2>Inscription</h2>
@@ -27,51 +29,25 @@
             <!-- NOM -->
             <div class="input-group">
                 <label for="lastname">Nom</label>
-                <input 
-                    type="text" 
-                    id="lastname" 
-                    name="lastname" 
-                    placeholder="Votre nom"
-                    required
-                >
+                <input type="text" id="lastname" name="lastname" placeholder="Votre nom" required>
             </div>
 
             <!-- PRENOM -->
             <div class="input-group">
                 <label for="firstname">Prénom</label>
-                <input 
-                    type="text" 
-                    id="firstname" 
-                    name="firstname" 
-                    placeholder="Votre prénom"
-                    required
-                >
+                <input type="text" id="firstname" name="firstname" placeholder="Votre prénom" required>
             </div>
 
             <!-- EMAIL -->
             <div class="input-group">
                 <label for="email">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="exemple@mail.com"
-                    autocomplete="email"
-                    required
-                >
+                <input type="email" id="email" name="email" placeholder="exemple@mail.com" required>
             </div>
 
             <!-- TELEPHONE -->
             <div class="input-group">
                 <label for="phone">Téléphone</label>
-                <input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone" 
-                    placeholder="0555000000"
-                    autocomplete="tel"
-                    required
-                >
+                <input type="tel" id="phone" name="phone" placeholder="0555000000" required>
             </div>
 
             <!-- FILIERE -->
@@ -99,7 +75,7 @@
             <!-- ANNEE -->
             <div class="input-group" id="yearGroup">
                 <label for="year">Année de parcours</label>
-                <select id="year" name="year" required>
+                <select id="year" name="year">
                     <option value="" disabled selected hidden>Choisir...</option>
                     <option value="1">1ère année</option>
                     <option value="2">2ème année</option>
@@ -108,7 +84,7 @@
                     <option value="5">5ème année</option>
                     <option value="6">6ème année</option>
                     <option value="9">Interne</option>
-                    <option value="10">Résidant</option>
+                    <option value="10">Résidanat</option>
                     <option value="11">Médecin généraliste</option>
                 </select>
             </div>
@@ -117,66 +93,10 @@
             <div class="input-group">
                 <label for="wilaya">Wilaya</label>
                 <select id="wilaya" name="wilaya" required>
-                    <option value="" disabled selected hidden>Choisir votre wilaya...</option>
-
-                    <option value="01 - Adrar">01 - Adrar</option>
-                    <option value="02 - Chlef">02 - Chlef</option>
-                    <option value="03 - Laghouat">03 - Laghouat</option>
-                    <option value="04 - Oum El Bouaghi">04 - Oum El Bouaghi</option>
-                    <option value="05 - Batna">05 - Batna</option>
-                    <option value="06 - Béjaïa">06 - Béjaïa</option>
-                    <option value="07 - Biskra">07 - Biskra</option>
-                    <option value="08 - Béchar">08 - Béchar</option>
-                    <option value="09 - Blida">09 - Blida</option>
-                    <option value="10 - Bouira">10 - Bouira</option>
-                    <option value="11 - Tamanrasset">11 - Tamanrasset</option>
-                    <option value="12 - Tébessa">12 - Tébessa</option>
-                    <option value="13 - Tlemcen">13 - Tlemcen</option>
-                    <option value="14 - Tiaret">14 - Tiaret</option>
-                    <option value="15 - Tizi Ouzou">15 - Tizi Ouzou</option>
-                    <option value="16 - Alger">16 - Alger</option>
-                    <option value="17 - Djelfa">17 - Djelfa</option>
-                    <option value="18 - Jijel">18 - Jijel</option>
-                    <option value="19 - Sétif">19 - Sétif</option>
-                    <option value="20 - Saïda">20 - Saïda</option>
-                    <option value="21 - Skikda">21 - Skikda</option>
-                    <option value="22 - Sidi Bel Abbès">22 - Sidi Bel Abbès</option>
-                    <option value="23 - Annaba">23 - Annaba</option>
-                    <option value="24 - Guelma">24 - Guelma</option>
-                    <option value="25 - Constantine">25 - Constantine</option>
-                    <option value="26 - Médéa">26 - Médéa</option>
-                    <option value="27 - Mostaganem">27 - Mostaganem</option>
-                    <option value="28 - M'Sila">28 - M'Sila</option>
-                    <option value="29 - Mascara">29 - Mascara</option>
-                    <option value="30 - Ouargla">30 - Ouargla</option>
-                    <option value="31 - Oran">31 - Oran</option>
-                    <option value="32 - El Bayadh">32 - El Bayadh</option>
-                    <option value="33 - Illizi">33 - Illizi</option>
-                    <option value="34 - Bordj Bou Arreridj">34 - Bordj Bou Arreridj</option>
-                    <option value="35 - Boumerdès">35 - Boumerdès</option>
-                    <option value="36 - El Tarf">36 - El Tarf</option>
-                    <option value="37 - Tindouf">37 - Tindouf</option>
-                    <option value="38 - Tissemsilt">38 - Tissemsilt</option>
-                    <option value="39 - El Oued">39 - El Oued</option>
-                    <option value="40 - Khenchela">40 - Khenchela</option>
-                    <option value="41 - Souk Ahras">41 - Souk Ahras</option>
-                    <option value="42 - Tipaza">42 - Tipaza</option>
-                    <option value="43 - Mila">43 - Mila</option>
-                    <option value="44 - Aïn Defla">44 - Aïn Defla</option>
-                    <option value="45 - Naâma">45 - Naâma</option>
-                    <option value="46 - Aïn Témouchent">46 - Aïn Témouchent</option>
-                    <option value="47 - Ghardaïa">47 - Ghardaïa</option>
-                    <option value="48 - Relizane">48 - Relizane</option>
-                    <option value="49 - Timimoun">49 - Timimoun</option>
-                    <option value="50 - Bordj Badji Mokhtar">50 - Bordj Badji Mokhtar</option>
-                    <option value="51 - Ouled Djellal">51 - Ouled Djellal</option>
-                    <option value="52 - Béni Abbès">52 - Béni Abbès</option>
-                    <option value="53 - In Salah">53 - In Salah</option>
-                    <option value="54 - In Guezzam">54 - In Guezzam</option>
-                    <option value="55 - Touggourt">55 - Touggourt</option>
-                    <option value="56 - Djanet">56 - Djanet</option>
-                    <option value="57 - El M'Ghair">57 - El M'Ghair</option>
-                    <option value="58 - El Meniaa">58 - El Meniaa</option>
+                    <option value="" disabled selected hidden>Choisir...</option>
+                    <option value="Alger">Alger</option>
+                    <option value="Oran">Oran</option>
+                    <option value="Constantine">Constantine</option>
                 </select>
             </div>
 
@@ -194,9 +114,10 @@
 
             <button type="submit">Valider l'inscription</button>
 
-            <p id="message" aria-live="polite"></p>
+            <p id="message"></p>
 
         </form>
+
     </section>
 
 </main>
@@ -209,25 +130,8 @@
     </div>
 </div>
 
-<script>
-const status = document.getElementById("status");
-const yearGroup = document.getElementById("yearGroup");
-const year = document.getElementById("year");
-
-status.addEventListener("change", function () {
-    if (this.value === "externe") {
-        yearGroup.style.display = "none";
-        year.disabled = true;
-        year.required = false;
-        year.value = "";
-    } else {
-        yearGroup.style.display = "block";
-        year.disabled = false;
-        year.required = true;
-    }
-});
-</script>
-
+<!-- JS EXTERNE UNIQUEMENT -->
 <script src="registerparajuna.js"></script>
+
 </body>
 </html>
