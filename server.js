@@ -73,7 +73,7 @@ app.post("/api/register", (req, res) => {
         phone,
         profession,
         status,
-        year,
+        
         wilaya,
         program
     } = req.body;
@@ -86,7 +86,7 @@ app.post("/api/register", (req, res) => {
         !phone ||
         !profession ||
         !status ||
-        !year ||
+        
         !wilaya ||
         !program
     ) {
@@ -108,11 +108,11 @@ app.post("/api/register", (req, res) => {
             phone,
             profession,
             status,
-            year,
+            
             wilaya,
             program
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const values = [
@@ -123,7 +123,7 @@ app.post("/api/register", (req, res) => {
         phone,
         profession,
         status,
-        year,
+        
         wilaya,
         program
     ];
@@ -157,7 +157,6 @@ Email : ${email}
 Téléphone : ${phone}
 Filière : ${profession}
 Statut : ${status}
-Année : ${year}
 Wilaya : ${wilaya}
 Programme : ${program}
 
