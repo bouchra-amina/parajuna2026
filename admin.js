@@ -121,7 +121,6 @@ function renderInscriptions(inscriptions) {
                 <td>${item.phone || "-"}</td>
                 <td>${item.filiere || "-"}</td>
                 <td>${item.status || "-"}</td>
-                <td>${item.year || "-"}</td>
                 <td>${item.wilaya || "-"}</td>
                 <td>${item.profession || "-"}</td>
                 <td>${item.program || "-"}</td>
