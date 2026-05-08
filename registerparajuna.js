@@ -27,9 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const closePopup = document.getElementById("closePopup");
     const message = document.getElementById("message");
 
-    /* =========================
-       SAFETY CHECKS
-    ========================== */
     if (!form) {
         console.error("Formulaire introuvable");
         return;
@@ -74,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* =========================
-       SUBMIT FORM
+       SUBMIT
     ========================== */
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -91,16 +88,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const wilaya = wilayaInput.value;
         const program = programInput.value;
 
-        /* =========================
-           VALIDATION
-        ========================== */
-        if (!lastname || !firstname || !email || !phone || !profession || !status || !wilaya || !program) {
-            showError("Veuillez remplir tous les champs.");
-            return;
-        }
+        const isExterne = status === "externe";
 
-        if (status === "interne" && !year) {
-            showError("Veuillez sélectionner l'année.");
+        /* =========================
+           VALIDATION PROPRE
+        ========================== */
+        if (
+            !lastname ||
+            !firstname ||
+            !email ||
+            !phone ||
+            !profession ||
+            !status ||
+            !wilaya ||
+            !program ||
+            (!isExterne && !year)
+        ) {
+            showError("Veuillez remplir tous les champs.");
             return;
         }
 
@@ -130,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     phone,
                     profession,
                     status,
-                    year: status === "externe" ? null : year,
+                    year: isExterne ? null : year,
                     wilaya,
                     program
                 })
@@ -166,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* =========================
-       CLOSE POPUP
+       POPUP
     ========================== */
     closePopup.addEventListener("click", () => {
         popup.classList.add("hidden");
