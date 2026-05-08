@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const phoneInput = document.getElementById("phone");
     const professionInput = document.getElementById("profession");
     const statusInput = document.getElementById("status");
-    const yearInput = document.getElementById("year");
-    const yearGroup = document.getElementById("yearGroup");
     const wilayaInput = document.getElementById("wilaya");
     const programInput = document.getElementById("program");
 
@@ -53,24 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* =========================
-       STATUT LOGIC
-    ========================== */
-    statusInput.addEventListener("change", function () {
-
-        if (this.value === "externe") {
-            yearInput.value = "";
-            yearInput.disabled = true;
-            yearInput.required = false;
-            yearGroup.style.display = "none";
-        } else {
-            yearInput.disabled = false;
-            yearInput.required = true;
-            yearGroup.style.display = "block";
-        }
-
-    });
-
-    /* =========================
        SUBMIT
     ========================== */
     form.addEventListener("submit", async (e) => {
@@ -84,14 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const phone = phoneInput.value.trim();
         const profession = professionInput.value;
         const status = statusInput.value;
-        const year = yearInput.value;
         const wilaya = wilayaInput.value;
         const program = programInput.value;
 
-        const isExterne = status === "externe";
-
         /* =========================
-           VALIDATION PROPRE
+           VALIDATION
         ========================== */
         if (
             !lastname ||
@@ -101,8 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             !profession ||
             !status ||
             !wilaya ||
-            !program ||
-            (!isExterne && !year)
+            !program
         ) {
             showError("Veuillez remplir tous les champs.");
             return;
@@ -134,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     phone,
                     profession,
                     status,
-                    year: isExterne ? null : year,
                     wilaya,
                     program
                 })
@@ -150,12 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 popup.classList.remove("hidden");
 
                 form.reset();
-
-                // reset UI
-                yearInput.disabled = false;
-                yearInput.required = true;
-                yearGroup.style.display = "block";
-
                 clearMessage();
 
             } else {
