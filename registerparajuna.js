@@ -65,7 +65,7 @@ statusInput.addEventListener("change", function () {
 });
 
 /* =========================
-   SUBMIT
+   SUBMIT FORM
 ========================= */
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -127,7 +127,7 @@ form.addEventListener("submit", async function (e) {
             body: JSON.stringify({
                 lastname,
                 firstname,
-                fullName: lastname + " " + firstname,
+                fullName: `${lastname} ${firstname}`,
                 email,
                 phone,
                 profession,
@@ -150,7 +150,7 @@ form.addEventListener("submit", async function (e) {
             form.reset();
             clearMessage();
 
-            // reset style year
+            // reset year UI
             yearInput.disabled = false;
             yearInput.style.opacity = "1";
             yearInput.style.cursor = "pointer";
