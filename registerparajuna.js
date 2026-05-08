@@ -47,6 +47,24 @@ function isValidPhone(phone) {
 }
 
 /* =========================
+   LOGIQUE STATUT / ANNEE
+========================= */
+statusInput.addEventListener("change", function () {
+
+    if (statusInput.value === "generaliste") {
+        yearInput.value = "";
+        yearInput.disabled = true;
+        yearInput.style.opacity = "0.5";
+        yearInput.style.cursor = "not-allowed";
+    } else {
+        yearInput.disabled = false;
+        yearInput.style.opacity = "1";
+        yearInput.style.cursor = "pointer";
+    }
+
+});
+
+/* =========================
    SUBMIT
 ========================= */
 form.addEventListener("submit", async function (e) {
@@ -74,11 +92,16 @@ form.addEventListener("submit", async function (e) {
         !phone ||
         !profession ||
         !status ||
-        !year ||
         !wilaya ||
         !program
     ) {
         showError("Veuillez remplir tous les champs.");
+        return;
+    }
+
+    // année obligatoire sauf médecin généraliste
+    if (status !== "generaliste" && !year) {
+        showError("Veuillez sélectionner l'année.");
         return;
     }
 
@@ -109,7 +132,7 @@ form.addEventListener("submit", async function (e) {
                 phone,
                 profession,
                 status,
-                year,
+                year: status === "generaliste" ? null : year,
                 wilaya,
                 program
             })
@@ -126,6 +149,11 @@ form.addEventListener("submit", async function (e) {
 
             form.reset();
             clearMessage();
+
+            // reset style year
+            yearInput.disabled = false;
+            yearInput.style.opacity = "1";
+            yearInput.style.cursor = "pointer";
 
         } else {
             showError(result.message || "Erreur lors de l'inscription.");
