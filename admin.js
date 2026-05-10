@@ -180,7 +180,7 @@ async function deleteInscription(id) {
         console.error(error);
         alert("Erreur serveur.");
     }
-});
+};
 
 /* =========================
    MESSAGE
