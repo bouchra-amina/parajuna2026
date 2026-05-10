@@ -252,6 +252,32 @@ app.delete("/api/admin/inscriptions/:id", (req, res) => {
         });
     });
 });
+/* =========================
+   UPDATE PRESENCE
+========================= */
+app.put("/api/admin/presence/:id", (req, res) => {
+
+    const id = req.params.id;
+    const { presence } = req.body;
+
+    const sql = "UPDATE inscriptions SET presence = ? WHERE id = ?";
+
+    db.query(sql, [presence, id], (err) => {
+
+        if (err) {
+            console.error("❌ Erreur update presence :", err);
+            return res.status(500).json({
+                success: false,
+                message: "Erreur base de données."
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Presence mise à jour"
+        });
+    });
+});
 
 /* =========================
    START SERVER
