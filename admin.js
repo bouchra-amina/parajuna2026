@@ -100,7 +100,7 @@ function renderInscriptions(inscriptions) {
     if (inscriptions.length === 0) {
         inscriptionsTable.innerHTML = `
             <tr>
-                <td colspan="11" style="text-align:center; padding: 25px;">
+                <td colspan="10" style="text-align:center; padding: 25px;">
                     Aucune inscription trouvée.
                 </td>
             </tr>
@@ -109,6 +109,7 @@ function renderInscriptions(inscriptions) {
     }
 
     inscriptionsTable.innerHTML = inscriptions.map((item) => {
+
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
             : "-";
@@ -119,10 +120,9 @@ function renderInscriptions(inscriptions) {
                 <td>${item.firstname || "-"}</td>
                 <td>${item.email || "-"}</td>
                 <td>${item.phone || "-"}</td>
-                <td>${item.filiere || "-"}</td>
+                <td>${item.profession || "-"}</td>
                 <td>${item.status || "-"}</td>
                 <td>${item.wilaya || "-"}</td>
-                <td>${item.profession || "-"}</td>
                 <td>${item.program || "-"}</td>
                 <td>${date}</td>
                 <td>
@@ -147,11 +147,9 @@ searchInput.addEventListener("input", function () {
             (item.firstname && item.firstname.toLowerCase().includes(value)) ||
             (item.email && item.email.toLowerCase().includes(value)) ||
             (item.phone && item.phone.includes(value)) ||
-            (item.filiere && item.filiere.toLowerCase().includes(value)) ||
-            (item.status && item.status.toLowerCase().includes(value)) ||
-            (item.year && item.year.toString().includes(value)) ||
-            (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
             (item.profession && item.profession.toLowerCase().includes(value)) ||
+            (item.status && item.status.toLowerCase().includes(value)) ||
+            (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
             (item.program && item.program.toLowerCase().includes(value))
         );
     });
@@ -182,7 +180,7 @@ async function deleteInscription(id) {
         console.error(error);
         alert("Erreur serveur.");
     }
-}
+});
 
 /* =========================
    MESSAGE
