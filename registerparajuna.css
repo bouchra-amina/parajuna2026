@@ -365,87 +365,89 @@ button[type="submit"]:active {
     color: var(--gold-light);
     letter-spacing: 0.5px;
 }
-
 /* =========================
-   POPUP
+   POPUP MODERNE CENTRÉE
 ========================= */
+
 .popup {
     position: fixed;
     inset: 0;
-
-    background: rgba(2,11,26,.75);
-    backdrop-filter: blur(12px);
-
     display: flex;
     align-items: center;
     justify-content: center;
 
-    z-index: 999;
+    background: rgba(2,11,26,.70);
+    backdrop-filter: blur(10px);
+
+    z-index: 9999;
 }
 
-.hidden {
-    display: none;
-}
-
+/* animation entrée */
 .popup-content {
     width: 90%;
-    max-width: 400px;
+    max-width: 380px;
 
-    padding: 36px 28px;
-    border-radius: 24px;
+    padding: 30px 25px;
+    border-radius: 22px;
 
-    background: rgba(10,22,40,.88);
-    backdrop-filter: blur(28px);
+    background: rgba(10,22,40,.92);
+    border: 1px solid rgba(245,158,11,.35);
 
-    border: 1px solid rgba(245,158,11,.40);
-
-    box-shadow:
-        0 0 0 1px rgba(245,158,11,.12),
-        0 0 80px rgba(245,158,11,.20),
-        0 24px 55px rgba(0,0,0,.60);
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
 
     text-align: center;
-    color: var(--white);
+    color: white;
 
-    animation: pop 0.35s cubic-bezier(.22,.68,0,1.3);
+    animation: popupIn 0.35s ease;
 }
 
+/* icône success (optionnel mais joli) */
+.popup-content::before {
+    content: "✓";
+    display: block;
+    font-size: 40px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(245,158,11,.6);
+}
+
+/* texte */
 .popup-content p {
-    font-family: 'Rajdhani', sans-serif;
     font-size: 1.05rem;
-    line-height: 1.65;
     font-weight: 600;
-    color: rgba(255,255,255,.90);
+    color: rgba(255,255,255,.9);
 }
 
+/* bouton */
 .popup-content button {
+    margin-top: 20px;
     width: 100%;
-    margin-top: 22px;
-    height: 50px;
+    height: 48px;
 
     border: none;
     border-radius: 999px;
 
     background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--amber));
-    color: #1a0a00;
-
-    font-family: 'Cinzel', serif;
-    font-size: 0.92rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-
     cursor: pointer;
-    transition: all 0.25s ease;
-
-    box-shadow: 0 8px 22px rgba(245,158,11,.35);
 }
 
-.popup-content button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(245,158,11,.50);
+/* animation */
+@keyframes popupIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
+/* hidden reste simple */
+.hidden {
+    display: none;
+}
 /* =========================
    FOOTER NOTE
 ========================= */
