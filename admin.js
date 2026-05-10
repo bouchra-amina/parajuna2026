@@ -7,8 +7,6 @@ const logoutBtn = document.getElementById("logoutBtn");
 const inscriptionsTable = document.getElementById("inscriptionsTable");
 const totalCount = document.getElementById("totalCount");
 const dashboardMessage = document.getElementById("dashboardMessage");
-
-/* SEARCH */
 const searchInput = document.getElementById("searchInput");
 
 let allInscriptions = [];
@@ -16,7 +14,7 @@ let allInscriptions = [];
 /* =========================
    LOGIN ADMIN
 ========================= */
-adminLoginForm.addEventListener("submit", async function (e) {
+adminLoginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const password = adminPassword.value.trim();
@@ -44,8 +42,8 @@ adminLoginForm.addEventListener("submit", async function (e) {
         showDashboard();
         loadInscriptions();
 
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         showMessage(loginMessage, "Erreur serveur.", "#ef4444");
     }
 });
@@ -53,7 +51,7 @@ adminLoginForm.addEventListener("submit", async function (e) {
 /* =========================
    LOGOUT
 ========================= */
-logoutBtn.addEventListener("click", function () {
+logoutBtn.addEventListener("click", () => {
     localStorage.removeItem("parajunaAdmin");
     dashboard.classList.remove("active");
     loginCard.style.display = "block";
@@ -62,7 +60,7 @@ logoutBtn.addEventListener("click", function () {
 });
 
 /* =========================
-   SHOW DASHBOARD
+   DASHBOARD
 ========================= */
 function showDashboard() {
     loginCard.style.display = "none";
@@ -85,14 +83,14 @@ async function loadInscriptions() {
         allInscriptions = result.inscriptions;
         renderInscriptions(allInscriptions);
 
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         showMessage(dashboardMessage, "Erreur serveur.", "#ef4444");
     }
 }
 
 /* =========================
-   RENDER TABLE (CORRIGÉ)
+   RENDER TABLE
 ========================= */
 function renderInscriptions(inscriptions) {
     totalCount.textContent = inscriptions.length;
@@ -100,7 +98,7 @@ function renderInscriptions(inscriptions) {
     if (inscriptions.length === 0) {
         inscriptionsTable.innerHTML = `
             <tr>
-                <td colspan="10" style="text-align:center; padding: 25px;">
+                <td colspan="11" style="text-align:center; padding:25px;">
                     Aucune inscription trouvée.
                 </td>
             </tr>
@@ -108,7 +106,7 @@ function renderInscriptions(inscriptions) {
         return;
     }
 
-    inscriptionsTable.innerHTML = inscriptions.map((item) => {
+    inscriptionsTable.innerHTML = inscriptions.map(item => {
 
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
@@ -125,6 +123,16 @@ function renderInscriptions(inscriptions) {
                 <td>${item.wilaya || "-"}</td>
                 <td>${item.program || "-"}</td>
                 <td>${date}</td>
+
+                <!-- PRESENCE -->
+                <td>
+                    <input type="checkbox"
+                        class="presence-checkbox"
+                        data-id="${item.id}"
+                        ${item.presence == 1 ? "checked" : ""}>
+                </td>
+
+                <!-- ACTION -->
                 <td>
                     <button class="btn-delete" onclick="deleteInscription('${item.id}')">
                         Supprimer
@@ -136,23 +144,45 @@ function renderInscriptions(inscriptions) {
 }
 
 /* =========================
-   SEARCH FILTER
+   PRESENCE UPDATE (GLOBAL LISTENER)
+========================= */
+document.addEventListener("change", async (e) => {
+    if (!e.target.classList.contains("presence-checkbox")) return;
+
+    const id = e.target.dataset.id;
+    const presence = e.target.checked ? 1 : 0;
+
+    try {
+        await fetch(`/api/admin/presence/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ presence })
+        });
+
+    } catch (err) {
+        console.error("Erreur presence:", err);
+        alert("Erreur serveur");
+    }
+});
+
+/* =========================
+   SEARCH
 ========================= */
 searchInput.addEventListener("input", function () {
     const value = this.value.toLowerCase().trim();
 
-    const filtered = allInscriptions.filter((item) => {
-        return (
-            (item.lastname && item.lastname.toLowerCase().includes(value)) ||
-            (item.firstname && item.firstname.toLowerCase().includes(value)) ||
-            (item.email && item.email.toLowerCase().includes(value)) ||
-            (item.phone && item.phone.includes(value)) ||
-            (item.profession && item.profession.toLowerCase().includes(value)) ||
-            (item.status && item.status.toLowerCase().includes(value)) ||
-            (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
-            (item.program && item.program.toLowerCase().includes(value))
-        );
-    });
+    const filtered = allInscriptions.filter(item =>
+        (item.lastname && item.lastname.toLowerCase().includes(value)) ||
+        (item.firstname && item.firstname.toLowerCase().includes(value)) ||
+        (item.email && item.email.toLowerCase().includes(value)) ||
+        (item.phone && item.phone.includes(value)) ||
+        (item.profession && item.profession.toLowerCase().includes(value)) ||
+        (item.status && item.status.toLowerCase().includes(value)) ||
+        (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
+        (item.program && item.program.toLowerCase().includes(value))
+    );
 
     renderInscriptions(filtered);
 });
@@ -161,7 +191,7 @@ searchInput.addEventListener("input", function () {
    DELETE
 ========================= */
 async function deleteInscription(id) {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cet inscrit ?")) return;
+    if (!confirm("Supprimer cet inscrit ?")) return;
 
     try {
         const response = await fetch(`/api/admin/inscriptions/${id}`, {
@@ -176,11 +206,11 @@ async function deleteInscription(id) {
             alert(result.message || "Erreur suppression");
         }
 
-    } catch (error) {
-        console.error(error);
-        alert("Erreur serveur.");
+    } catch (err) {
+        console.error(err);
+        alert("Erreur serveur");
     }
-};
+}
 
 /* =========================
    MESSAGE
