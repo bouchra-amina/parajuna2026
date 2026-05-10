@@ -124,7 +124,7 @@ body::after{
 .brand-box h1{
     font-family:'Cinzel',serif;
 
-    font-size:clamp(2.4rem,5vw,4.6rem);
+    font-size:clamp(1.8rem,3vw,3rem);
 
     font-weight:900;
 
