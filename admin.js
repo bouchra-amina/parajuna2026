@@ -8,7 +8,7 @@ const inscriptionsTable = document.getElementById("inscriptionsTable");
 const totalCount = document.getElementById("totalCount");
 const dashboardMessage = document.getElementById("dashboardMessage");
 const searchInput = document.getElementById("searchInput");
-
+const exportExcelBtn = document.getElementById("exportExcelBtn");
 let allInscriptions = [];
 
 /* =========================
@@ -226,4 +226,31 @@ function showMessage(element, text, color) {
 if (localStorage.getItem("parajunaAdmin") === "connected") {
     showDashboard();
     loadInscriptions();
+}
+
+exportExcelBtn.addEventListener("click", exportToExcel);
+
+function exportToExcel() {
+
+    const data = allInscriptions.map(item => ({
+        Nom: item.lastname,
+        Prenom: item.firstname,
+        Email: item.email,
+        Telephone: item.phone,
+        Profession: item.profession,
+        Statut: item.status,
+        Wilaya: item.wilaya,
+        Programme: item.program,
+        Presence: item.presence == 1 ? "Présent" : "Absent",
+        Date: item.created_at
+            ? new Date(item.created_at).toLocaleDateString("fr-FR")
+            : "-"
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inscriptions");
+
+    XLSX.writeFile(workbook, "Parajuna_Inscriptions.xlsx");
 }
