@@ -18,23 +18,14 @@ const ADMIN_PASSWORD = "parajuna2026";
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-/* fichiers statiques */
 app.use(express.static(__dirname));
 
 /* =========================
-   DATABASE
+   DATABASE (FIX RAILWAY)
 ========================= */
-const db = mysql.createPool({
-    host: process.env.MYSQLHOST,
-    user: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD,
-    database: process.env.MYSQLDATABASE,
-    port: process.env.MYSQLPORT,
-    waitForConnections: true,
-    connectionLimit: 10
-});
 
+/* DEBUG ENV (important pour Railway) */
+console.log("MYSQL_URL =", process.env.MYSQL_URL);
 console.log({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
@@ -42,8 +33,33 @@ console.log({
     port: process.env.MYSQLPORT
 });
 
-db.on("error", (err) => {
-    console.error("MySQL fatal error:", err);
+/* CONNECTION SAFE */
+let db;
+
+if (process.env.MYSQL_URL) {
+    // Railway recommended way
+    db = mysql.createPool(process.env.MYSQL_URL);
+} else {
+    // fallback manual
+    db = mysql.createPool({
+        host: process.env.MYSQLHOST,
+        user: process.env.MYSQLUSER || "root",
+        password: process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD || "",
+        database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || "railway",
+        port: process.env.MYSQLPORT || 3306,
+        waitForConnections: true,
+        connectionLimit: 10
+    });
+}
+
+/* TEST CONNECTION */
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error("❌ MySQL connection error:", err);
+        return;
+    }
+    console.log("✔ MySQL connecté avec succès");
+    connection.release();
 });
 
 /* =========================
@@ -77,12 +93,10 @@ app.post("/api/register", (req, res) => {
         phone,
         profession,
         status,
-        
         wilaya,
         program
     } = req.body;
 
-    /* validation */
     if (
         !lastname ||
         !firstname ||
@@ -90,7 +104,6 @@ app.post("/api/register", (req, res) => {
         !phone ||
         !profession ||
         !status ||
-        
         !wilaya ||
         !program
     ) {
@@ -104,18 +117,7 @@ app.post("/api/register", (req, res) => {
 
     const sql = `
         INSERT INTO inscriptions
-        (
-            lastname,
-            firstname,
-            fullName,
-            email,
-            phone,
-            profession,
-            status,
-            
-            wilaya,
-            program
-        )
+        (lastname, firstname, fullName, email, phone, profession, status, wilaya, program)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
@@ -127,51 +129,27 @@ app.post("/api/register", (req, res) => {
         phone,
         profession,
         status,
-        
         wilaya,
         program
     ];
 
     db.query(sql, values, (err) => {
-
         if (err) {
             console.error("❌ Erreur insertion :", err);
-
             return res.status(500).json({
                 success: false,
                 message: "Erreur base de données."
             });
         }
 
-        /* email confirmation */
-        transporter.sendMail(
-            {
-                from: "Parajuna <sayadbouchraamina@gmail.com>",
-                to: email,
-                subject: "Confirmation inscription Parajuna",
-                text:
-`Bonjour ${firstname} ${lastname},
+        transporter.sendMail({
+            from: "Parajuna <sayadbouchraamina@gmail.com>",
+            to: email,
+            subject: "Confirmation inscription Parajuna",
+            text: `Bonjour ${firstname} ${lastname},
 
-Votre inscription à PARAJUNA est confirmée ✔
-
-Informations :
-Nom : ${lastname}
-Prénom : ${firstname}
-Email : ${email}
-Téléphone : ${phone}
-Filière : ${profession}
-Statut : ${status}
-Wilaya : ${wilaya}
-Programme : ${program}
-
-Merci et à bientôt.`
-            },
-            (mailError) => {
-                if (mailError) {
-                    console.error("⚠ Erreur envoi email :", mailError);
-                }
-            }
-        );
+Votre inscription à PARAJUNA est confirmée ✔`
+        });
 
         return res.json({
             success: true,
@@ -200,20 +178,12 @@ app.post("/api/admin/login", (req, res) => {
 ========================= */
 app.get("/api/admin/inscriptions", (req, res) => {
 
-    const sql = `
-        SELECT *
-        FROM inscriptions
-        ORDER BY id DESC
-    `;
+    const sql = "SELECT * FROM inscriptions ORDER BY id DESC";
 
     db.query(sql, (err, results) => {
-
         if (err) {
             console.error("❌ Erreur lecture :", err);
-
-            return res.status(500).json({
-                success: false
-            });
+            return res.status(500).json({ success: false });
         }
 
         res.json({
@@ -224,63 +194,48 @@ app.get("/api/admin/inscriptions", (req, res) => {
 });
 
 /* =========================
-   DELETE INSCRIPTION
+   DELETE
 ========================= */
 app.delete("/api/admin/inscriptions/:id", (req, res) => {
 
-    const id = req.params.id;
+    db.query(
+        "DELETE FROM inscriptions WHERE id = ?",
+        [req.params.id],
+        (err, result) => {
 
-    const sql = "DELETE FROM inscriptions WHERE id = ?";
+            if (err) {
+                return res.status(500).json({ success: false });
+            }
 
-    db.query(sql, [id], (err, result) => {
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ success: false });
+            }
 
-        if (err) {
-            console.error("❌ Erreur suppression :", err);
-
-            return res.status(500).json({
-                success: false,
-                message: "Erreur base de données."
-            });
+            res.json({ success: true });
         }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Inscription introuvable."
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Inscription supprimée avec succès."
-        });
-    });
+    );
 });
+
 /* =========================
    UPDATE PRESENCE
 ========================= */
 app.put("/api/admin/presence/:id", (req, res) => {
 
-    const id = req.params.id;
-    const { presence } = req.body;
+    db.query(
+        "UPDATE inscriptions SET presence = ? WHERE id = ?",
+        [req.body.presence, req.params.id],
+        (err) => {
 
-    const sql = "UPDATE inscriptions SET presence = ? WHERE id = ?";
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Erreur base de données."
+                });
+            }
 
-    db.query(sql, [presence, id], (err) => {
-
-        if (err) {
-            console.error("❌ Erreur update presence :", err);
-            return res.status(500).json({
-                success: false,
-                message: "Erreur base de données."
-            });
+            res.json({ success: true });
         }
-
-        res.json({
-            success: true,
-            message: "Presence mise à jour"
-        });
-    });
+    );
 });
 
 /* =========================
