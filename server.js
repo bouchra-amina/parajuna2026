@@ -25,21 +25,25 @@ app.use(express.static(__dirname));
 /* =========================
    DATABASE
 ========================= */
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD,
-    database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    port: process.env.MYSQLPORT,
+    waitForConnections: true,
+    connectionLimit: 10
+});
+
+console.log({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    database: process.env.MYSQLDATABASE,
     port: process.env.MYSQLPORT
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error("❌ Erreur connexion MySQL :", err);
-        return;
-    }
-
-    console.log("✔ Base de données connectée");
+db.on("error", (err) => {
+    console.error("MySQL fatal error:", err);
 });
 
 /* =========================
