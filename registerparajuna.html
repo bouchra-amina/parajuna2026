@@ -16,7 +16,10 @@
         <div class="title-box">
             <h1>PARAJUNA 2025</h1>
         </div>
-        <p>Rejoignez un événement médical d'exception dédié à l'apprentissage et à l'innovation.</p>
+
+        <p>
+            Rejoignez un événement médical d'exception dédié à l'apprentissage et à l'innovation.
+        </p>
     </section>
 
     <!-- DROITE -->
@@ -53,8 +56,12 @@
             <!-- FILIERE -->
             <div class="input-group">
                 <label for="profession">Filière</label>
+
                 <select id="profession" required>
-                    <option value="" disabled selected hidden>Choisir...</option>
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
                     <option value="medecine">Médecine</option>
                     <option value="dentaire">Médecine dentaire</option>
                     <option value="pharmacie">Pharmacie</option>
@@ -65,8 +72,12 @@
             <!-- STATUT -->
             <div class="input-group">
                 <label for="status">Statut-Année</label>
+
                 <select id="status" required>
-                    <option value="" disabled selected hidden>Choisir...</option>                    
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
                     <option value="1e_annee">1e année</option>
                     <option value="2e_annee">2e année</option>
                     <option value="3e_annee">3e année</option>
@@ -77,15 +88,18 @@
                     <option value="Résident">Interne</option>
                     <option value="generaliste">Médecin généraliste</option>
                     <option value="specialiste">Médecin spécialiste</option>
-                    
                 </select>
             </div>
 
             <!-- WILAYA -->
             <div class="input-group">
                 <label for="wilaya">Wilaya</label>
+
                 <select id="wilaya" required>
-                    <option value="" disabled selected hidden>Choisir...</option>
+
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
 
                     <option value="01 - Adrar">01 - Adrar</option>
                     <option value="02 - Chlef">02 - Chlef</option>
@@ -151,17 +165,188 @@
 
             <!-- PROGRAMME -->
             <div class="input-group">
-                <label for="program">Programme</label>
-                <select id="program" required>
-                    <option value="" disabled selected hidden>Choisir...</option>
-                    <option value="ateliers">Ateliers</option>
-                    <option value="masterclass">masterclass</option>
-                    <option value="conference">Tables rondes</option>
-                    
+
+                <label for="prog_dimanche">
+                    Programme - Dimanche
+                </label>
+
+                <select name="prog_dimanche" id="prog_dimanche" required>
+
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
+                    <option value="dim_hemogramme">
+                        L'Hémogramme : Approfondissement Clinique & Cas Pratiques
+                    </option>
+
+                    <option value="dim_hbp">
+                        HBP 360
+                    </option>
+
+                    <option value="dim_urgence_chir">
+                        Gestion d'une urgence chirurgicale
+                    </option>
+
+                    <option value="dim_approche_cardio">
+                        Approche structurée en cardiologie: Penser vite - décider juste
+                    </option>
+
+                    <option value="dim_atelier_suture">
+                        Atelier suture
+                    </option>
+
+                    <option value="dim_atelier_tr">
+                        Atelier TR et sondage vésical
+                    </option>
+
+                    <option value="dim_aucun">
+                        Aucun
+                    </option>
+
                 </select>
             </div>
 
-            <button type="submit">Valider l'inscription</button>
+            <div class="input-group">
+
+                <label for="prog_lundi">
+                    Programme - Lundi
+                </label>
+
+                <select name="prog_lundi" id="prog_lundi" required>
+
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
+                    <option value="lun_imagerie">
+                        Discussion sur la pertinence des examens d'imagerie
+                    </option>
+
+                    <option value="lun_brulures">
+                        Brûlures : savoir évaluer pour mieux prendre en charge
+                    </option>
+
+                    <option value="lun_radio_thoracique">
+                        ABC de la radiographie thoracique
+                    </option>
+
+                    <option value="lun_care_for">
+                        CARE FOR
+                    </option>
+
+                    <option value="lun_atelier_galenique">
+                        Atelier Galénique
+                    </option>
+
+                    <option value="lun_atelier_suture">
+                        Atelier suture
+                    </option>
+
+                    <option value="lun_atelier_rcp">
+                        Atelier réanimation cardio-pulmonaire
+                    </option>
+
+                    <option value="lun_aucun">
+                        Aucun
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="input-group">
+
+                <label for="prog_mardi">
+                    Programme - Mardi
+                </label>
+
+                <select name="prog_mardi" id="prog_mardi" required>
+
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
+                    <option value="mar_dyspnee">
+                        Dyspnée aigue: les reflexes qui sauvent
+                    </option>
+
+                    <option value="mar_polymedication">
+                        Polymédication
+                    </option>
+
+                    <option value="mar_urgences_ped">
+                        Urgences pédiatriques: l'enfant fébrile / Ictère néonatal
+                    </option>
+
+                    <option value="mar_carences">
+                        Carences vitaminiques : mécanismes et exploration
+                    </option>
+
+                    <option value="mar_vue">
+                        Comment préserver la vue pour une meilleure vie
+                    </option>
+
+                    <option value="mar_atelier_suture">
+                        Atelier suture
+                    </option>
+
+                    <option value="mar_atelier_ecg">
+                        Atelier ECG
+                    </option>
+
+                    <option value="mar_aucun">
+                        Aucun
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="input-group">
+
+                <label for="prog_mercredi">
+                    Programme - Mercredi
+                </label>
+
+                <select name="prog_mercredi" id="prog_mercredi" required>
+
+                    <option value="" disabled selected hidden>
+                        Choisir...
+                    </option>
+
+                    <option value="mer_infections">
+                        Infections respiratoires basses
+                    </option>
+
+                    <option value="mer_depistage_cancer">
+                        Role des médecins dans le dépistage et diagnostic
+                    </option>
+
+                    <option value="mer_bilan_renal">
+                        Bilan rénal et son interprétation
+                    </option>
+
+                    <option value="mer_concept_bopt">
+                        Concept BOPT
+                    </option>
+
+                    <option value="mer_atelier_suture">
+                        Atelier suture
+                    </option>
+
+                    <option value="mer_atelier_ecg">
+                        Atelier ECG
+                    </option>
+
+                    <option value="mer_aucun">
+                        Aucun
+                    </option>
+
+                </select>
+            </div>
+
+            <button type="submit">
+                Valider l'inscription
+            </button>
 
             <p id="message"></p>
 
@@ -173,10 +358,17 @@
 
 <!-- POPUP -->
 <div id="popup" class="popup hidden">
+
     <div class="popup-content">
+
         <p id="popupText"></p>
-        <button id="closePopup">Génial !</button>
+
+        <button id="closePopup">
+            Génial !
+        </button>
+
     </div>
+
 </div>
 
 <script src="registerparajuna.js"></script>
