@@ -15,7 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const professionInput = document.getElementById("profession");
     const statusInput = document.getElementById("status");
     const wilayaInput = document.getElementById("wilaya");
-    const programInput = document.getElementById("program");
+
+    // ✔️ CORRECTION ICI (remplacement de programInput)
+    const progDimancheInput = document.getElementById("prog_dimanche");
+    const progLundiInput = document.getElementById("prog_lundi");
+    const progMardiInput = document.getElementById("prog_mardi");
+    const progMercrediInput = document.getElementById("prog_mercredi");
 
     /* =========================
        UI
@@ -65,7 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const profession = professionInput.value;
         const status = statusInput.value;
         const wilaya = wilayaInput.value;
-        const program = programInput.value;
+
+        /* ✔️ CORRECTION ICI */
+        const progDimanche = progDimancheInput.value;
+        const progLundi = progLundiInput.value;
+        const progMardi = progMardiInput.value;
+        const progMercredi = progMercrediInput.value;
+
+        // ✔️ NOUVEAU CHAMP programme (fusion)
+        const program = `
+Dimanche: ${progDimanche}
+Lundi: ${progLundi}
+Mardi: ${progMardi}
+Mercredi: ${progMercredi}
+`;
 
         /* =========================
            VALIDATION
@@ -78,7 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
             !profession ||
             !status ||
             !wilaya ||
-            !program
+            !progDimanche ||
+            !progLundi ||
+            !progMardi ||
+            !progMercredi
         ) {
             showError("Veuillez remplir tous les champs.");
             return;
