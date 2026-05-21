@@ -85,7 +85,14 @@ async function loadInscriptions() {
 }
 
 /* =========================
-   RENDER TABLE (FIX PROGRAMME)
+   CLEAN PROGRAM VALUE
+========================= */
+function cleanProgram(value) {
+    return (value || "-").replace(/^(dim_|lun_|mar_|mer_)/, "");
+}
+
+/* =========================
+   RENDER TABLE
 ========================= */
 function renderInscriptions(inscriptions) {
 
@@ -104,15 +111,12 @@ function renderInscriptions(inscriptions) {
 
     inscriptionsTable.innerHTML = inscriptions.map(item => {
 
-        /* =========================
-           FIX PROGRAMME (ROBUSTE)
-        ========================== */
         const programText = item.program || "";
 
-        const dimanche = (programText.match(/Dimanche:\s*(.*)/) || [])[1]?.trim() || "-";
-        const lundi = (programText.match(/Lundi:\s*(.*)/) || [])[1]?.trim() || "-";
-        const mardi = (programText.match(/Mardi:\s*(.*)/) || [])[1]?.trim() || "-";
-        const mercredi = (programText.match(/Mercredi:\s*(.*)/) || [])[1]?.trim() || "-";
+        const dimanche = cleanProgram((programText.match(/Dimanche:\s*(.*)/) || [])[1]);
+        const lundi = cleanProgram((programText.match(/Lundi:\s*(.*)/) || [])[1]);
+        const mardi = cleanProgram((programText.match(/Mardi:\s*(.*)/) || [])[1]);
+        const mercredi = cleanProgram((programText.match(/Mercredi:\s*(.*)/) || [])[1]);
 
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
@@ -128,7 +132,6 @@ function renderInscriptions(inscriptions) {
                 <td>${item.status || "-"}</td>
                 <td>${item.wilaya || "-"}</td>
 
-                <!-- PROGRAMME PAR JOUR -->
                 <td>${dimanche}</td>
                 <td>${lundi}</td>
                 <td>${mardi}</td>
