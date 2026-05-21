@@ -85,7 +85,7 @@ async function loadInscriptions() {
 }
 
 /* =========================
-   RENDER TABLE (CORRIGÉ)
+   RENDER TABLE (FIX PROGRAMME)
 ========================= */
 function renderInscriptions(inscriptions) {
 
@@ -104,12 +104,15 @@ function renderInscriptions(inscriptions) {
 
     inscriptionsTable.innerHTML = inscriptions.map(item => {
 
-        const progLines = (item.program || "").split("\n");
+        /* =========================
+           FIX PROGRAMME (ROBUSTE)
+        ========================== */
+        const programText = item.program || "";
 
-        const dimanche = progLines[0]?.replace("Dimanche:", "").trim() || "-";
-        const lundi = progLines[1]?.replace("Lundi:", "").trim() || "-";
-        const mardi = progLines[2]?.replace("Mardi:", "").trim() || "-";
-        const mercredi = progLines[3]?.replace("Mercredi:", "").trim() || "-";
+        const dimanche = (programText.match(/Dimanche:\s*(.*)/) || [])[1]?.trim() || "-";
+        const lundi = (programText.match(/Lundi:\s*(.*)/) || [])[1]?.trim() || "-";
+        const mardi = (programText.match(/Mardi:\s*(.*)/) || [])[1]?.trim() || "-";
+        const mercredi = (programText.match(/Mercredi:\s*(.*)/) || [])[1]?.trim() || "-";
 
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
