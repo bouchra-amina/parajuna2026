@@ -92,6 +92,17 @@ function cleanProgram(value) {
 }
 
 /* =========================
+   MERCREDI MATIN FORMAT
+========================= */
+function formatMercrediMatin(value) {
+    if (!value) return "-";
+
+    if (Array.isArray(value)) return value.join(" | ");
+
+    return value;
+}
+
+/* =========================
    RENDER TABLE
 ========================= */
 function renderInscriptions(inscriptions) {
@@ -101,7 +112,7 @@ function renderInscriptions(inscriptions) {
     if (inscriptions.length === 0) {
         inscriptionsTable.innerHTML = `
             <tr>
-                <td colspan="14" style="text-align:center; padding:25px;">
+                <td colspan="15" style="text-align:center; padding:25px;">
                     Aucune inscription trouvée.
                 </td>
             </tr>
@@ -117,6 +128,9 @@ function renderInscriptions(inscriptions) {
         const lundi = cleanProgram((programText.match(/Lundi:\s*(.*)/) || [])[1]);
         const mardi = cleanProgram((programText.match(/Mardi:\s*(.*)/) || [])[1]);
         const mercredi = cleanProgram((programText.match(/Mercredi:\s*(.*)/) || [])[1]);
+
+        // 🔥 NOUVEAU CHAMP
+        const mercrediMatin = formatMercrediMatin(item.mercrediMatin);
 
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
@@ -136,6 +150,9 @@ function renderInscriptions(inscriptions) {
                 <td>${lundi}</td>
                 <td>${mardi}</td>
                 <td>${mercredi}</td>
+
+                <!-- 🔥 AJOUT COLONNE -->
+                <td>${mercrediMatin}</td>
 
                 <td>${date}</td>
 
@@ -190,7 +207,8 @@ searchInput.addEventListener("input", function () {
         (item.profession && item.profession.toLowerCase().includes(value)) ||
         (item.status && item.status.toLowerCase().includes(value)) ||
         (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
-        (item.program && item.program.toLowerCase().includes(value))
+        (item.program && item.program.toLowerCase().includes(value)) ||
+        (item.mercrediMatin && item.mercrediMatin.toLowerCase?.includes(value))
     );
 
     renderInscriptions(filtered);
@@ -249,6 +267,10 @@ function exportToExcel() {
         Statut: item.status,
         Wilaya: item.wilaya,
         Programme: item.program,
+
+        // 🔥 AJOUT EXPORT
+        "Mercredi matin": item.mercrediMatin || "-",
+
         Presence: item.presence == 1 ? "Présent" : "Absent",
         Date: item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
