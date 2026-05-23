@@ -157,23 +157,48 @@ async function deleteInscription(id) {
 /* =========================
    EXPORT
 ========================= */
-exportExcelBtn.addEventListener("click", () => {
+function exportToExcel() {
 
-    const data = allInscriptions.map(item => ({
-        Nom: item.lastname,
-        Prenom: item.firstname,
-        Email: item.email,
-        Telephone: item.phone,
-        Profession: item.profession,
-        Statut: item.status,
-        Wilaya: item.wilaya,
-        Programme: item.program,
-        Date: item.created_at
-    }));
+    const data = allInscriptions.map(item => {
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
+        const program = item.program || "";
 
-    XLSX.utils.book_append_sheet(wb, ws, "Inscriptions");
-    XLSX.writeFile(wb, "Parajuna.xlsx");
-});
+        const dimanche = (program.match(/Dimanche:\s*(.*)/) || [])[1] || "-";
+        const lundi = (program.match(/Lundi:\s*(.*)/) || [])[1] || "-";
+        const mardi = (program.match(/Mardi:\s*(.*)/) || [])[1] || "-";
+        const mercredi = (program.match(/Mercredi:\s*(.*)/) || [])[1] || "-";
+
+        const mercrediMatin = (program.match(/Mercredi matin:\s*([\s\S]*)/) || [])[1]
+            ? (program.match(/Mercredi matin:\s*([\s\S]*)/)[1]).trim()
+            : "-";
+
+        return {
+            Nom: item.lastname,
+            Prenom: item.firstname,
+            Email: item.email,
+            Telephone: item.phone,
+            Profession: item.profession,
+            Statut: item.status,
+            Wilaya: item.wilaya,
+
+            Dimanche: dimanche,
+            Lundi: lundi,
+            Mardi: mardi,
+            Mercredi: mercredi,
+            "Mercredi matin": mercrediMatin,
+
+            Presence: item.presence == 1 ? "Présent" : "Absent",
+
+            Date: item.created_at
+                ? new Date(item.created_at).toLocaleDateString("fr-FR")
+                : "-"
+        };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inscriptions");
+
+    XLSX.writeFile(workbook, "Parajuna_Inscriptions.xlsx");
+}
