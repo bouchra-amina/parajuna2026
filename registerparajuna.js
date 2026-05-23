@@ -1,13 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================
-       FORM
-    ========================== */
     const form = document.getElementById("registerForm");
 
-    /* =========================
-       INPUTS
-    ========================== */
     const lastnameInput = document.getElementById("lastname");
     const firstnameInput = document.getElementById("firstname");
     const emailInput = document.getElementById("email");
@@ -21,9 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const progMardiInput = document.getElementById("prog_mardi");
     const progMercrediInput = document.getElementById("prog_mercredi");
 
-    /* =========================
-       UI
-    ========================== */
     const popup = document.getElementById("popup");
     const popupText = document.getElementById("popupText");
     const closePopup = document.getElementById("closePopup");
@@ -34,9 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    /* =========================
-       HELPERS
-    ========================== */
     function showError(text) {
         message.style.color = "#ff4d4d";
         message.textContent = text;
@@ -54,9 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return /^[0-9+\s]{8,15}$/.test(phone);
     }
 
-    /* =========================
-       SUBMIT
-    ========================== */
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearMessage();
@@ -74,41 +59,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const progMardi = progMardiInput.value;
         const progMercredi = progMercrediInput.value;
 
-        /* =========================
-           MERCREDI MATIN MULTI-CHOIX
-        ========================== */
+        // MERCREDI MATIN (multi-choix sécurisé)
         const mercrediMatin = Array.from(
             document.querySelectorAll('input[name="mercredi_matin"]:checked')
-        ).map(item => item.parentElement.textContent.trim());
+        ).map(el => el.closest("label").textContent.trim());
 
-        /* =========================
-           PROGRAMME FUSION
-        ========================== */
-        const program = `
-Dimanche: ${progDimanche}
+        // PROGRAMME FINAL
+        const program =
+`Dimanche: ${progDimanche}
 Lundi: ${progLundi}
 Mardi: ${progMardi}
 Mercredi: ${progMercredi}
+Mercredi matin: ${mercrediMatin.length ? mercrediMatin.join(" | ") : "-"}`;
 
-Mercredi matin:
-${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
-`;
-
-        /* =========================
-           VALIDATION
-        ========================== */
+        // VALIDATION
         if (
-            !lastname ||
-            !firstname ||
-            !email ||
-            !phone ||
-            !profession ||
-            !status ||
-            !wilaya ||
-            !progDimanche ||
-            !progLundi ||
-            !progMardi ||
-            !progMercredi
+            !lastname || !firstname || !email || !phone ||
+            !profession || !status || !wilaya ||
+            !progDimanche || !progLundi || !progMardi || !progMercredi
         ) {
             showError("Veuillez remplir tous les champs.");
             return;
@@ -124,9 +92,6 @@ ${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
             return;
         }
 
-        /* =========================
-           SEND TO SERVER
-        ========================== */
         try {
             const response = await fetch("/api/register", {
                 method: "POST",
@@ -148,15 +113,12 @@ ${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
             const result = await response.json();
 
             if (result.success) {
-
                 popupText.textContent =
                     `Bienvenue ${firstname} ${lastname} ✨ Inscription réussie !`;
 
                 popup.classList.remove("hidden");
-
                 form.reset();
                 clearMessage();
-
             } else {
                 showError(result.message || "Erreur lors de l'inscription.");
             }
@@ -167,9 +129,6 @@ ${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
         }
     });
 
-    /* =========================
-       POPUP
-    ========================== */
     closePopup.addEventListener("click", () => {
         popup.classList.add("hidden");
     });
@@ -179,5 +138,4 @@ ${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
             popup.classList.add("hidden");
         }
     });
-
 });
