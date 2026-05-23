@@ -13,45 +13,30 @@ const exportExcelBtn = document.getElementById("exportExcelBtn");
 let allInscriptions = [];
 
 /* =========================
-   LOGIN ADMIN
+   LOGIN
 ========================= */
 adminLoginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const password = adminPassword.value.trim();
 
-    try {
-        const response = await fetch("/api/admin/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ password })
-        });
+    const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+    });
 
-        const result = await response.json();
+    const result = await response.json();
 
-        if (!result.success) {
-            showMessage(loginMessage, result.message || "Mot de passe incorrect.", "#ef4444");
-            return;
-        }
-
-        localStorage.setItem("parajunaAdmin", "connected");
-        showDashboard();
-        loadInscriptions();
-
-    } catch (err) {
-        console.error(err);
-        showMessage(loginMessage, "Erreur serveur.", "#ef4444");
+    if (!result.success) {
+        loginMessage.textContent = result.message || "Mot de passe incorrect";
+        loginMessage.style.color = "red";
+        return;
     }
-});
 
-/* =========================
-   LOGOUT
-========================= */
-logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("parajunaAdmin");
-    dashboard.classList.remove("active");
-    loginCard.style.display = "block";
-    adminPassword.value = "";
+    localStorage.setItem("parajunaAdmin", "connected");
+    showDashboard();
+    loadInscriptions();
 });
 
 /* =========================
@@ -63,74 +48,48 @@ function showDashboard() {
 }
 
 /* =========================
-   LOAD DATA
+   LOAD
 ========================= */
 async function loadInscriptions() {
-    try {
-        const response = await fetch("/api/admin/inscriptions");
-        const result = await response.json();
+    const response = await fetch("/api/admin/inscriptions");
+    const result = await response.json();
 
-        if (!result.success) {
-            showMessage(dashboardMessage, "Erreur de chargement.", "#ef4444");
-            return;
-        }
-
-        allInscriptions = result.inscriptions;
-        renderInscriptions(allInscriptions);
-
-    } catch (err) {
-        console.error(err);
-        showMessage(dashboardMessage, "Erreur serveur.", "#ef4444");
-    }
+    allInscriptions = result.inscriptions || [];
+    renderInscriptions(allInscriptions);
 }
 
 /* =========================
-   CLEAN PROGRAM VALUE
+   CLEAN TEXT
 ========================= */
-function cleanProgram(value) {
+function clean(value) {
     return (value || "-").replace(/^(dim_|lun_|mar_|mer_)/, "");
 }
 
 /* =========================
-   MERCREDI MATIN FORMAT
+   EXTRACTION MERCREDI MATIN
 ========================= */
-function formatMercrediMatin(value) {
-    if (!value) return "-";
-
-    if (Array.isArray(value)) return value.join(" | ");
-
-    return value;
+function extractMercrediMatin(program) {
+    const match = program.match(/Mercredi matin:\s*([\s\S]*?)(\n\n|$)/);
+    return match ? match[1].trim() : "-";
 }
 
 /* =========================
-   RENDER TABLE
+   RENDER
 ========================= */
-function renderInscriptions(inscriptions) {
+function renderInscriptions(data) {
 
-    totalCount.textContent = inscriptions.length;
+    totalCount.textContent = data.length;
 
-    if (inscriptions.length === 0) {
-        inscriptionsTable.innerHTML = `
-            <tr>
-                <td colspan="15" style="text-align:center; padding:25px;">
-                    Aucune inscription trouvée.
-                </td>
-            </tr>
-        `;
-        return;
-    }
+    inscriptionsTable.innerHTML = data.map(item => {
 
-    inscriptionsTable.innerHTML = inscriptions.map(item => {
+        const program = item.program || "";
 
-        const programText = item.program || "";
+        const dimanche = clean((program.match(/Dimanche:\s*(.*)/) || [])[1]);
+        const lundi = clean((program.match(/Lundi:\s*(.*)/) || [])[1]);
+        const mardi = clean((program.match(/Mardi:\s*(.*)/) || [])[1]);
+        const mercredi = clean((program.match(/Mercredi:\s*(.*)/) || [])[1]);
 
-        const dimanche = cleanProgram((programText.match(/Dimanche:\s*(.*)/) || [])[1]);
-        const lundi = cleanProgram((programText.match(/Lundi:\s*(.*)/) || [])[1]);
-        const mardi = cleanProgram((programText.match(/Mardi:\s*(.*)/) || [])[1]);
-        const mercredi = cleanProgram((programText.match(/Mercredi:\s*(.*)/) || [])[1]);
-
-        // 🔥 NOUVEAU CHAMP
-        const mercrediMatin = formatMercrediMatin(item.mercrediMatin);
+        const mercrediMatin = extractMercrediMatin(program);
 
         const date = item.created_at
             ? new Date(item.created_at).toLocaleDateString("fr-FR")
@@ -151,7 +110,7 @@ function renderInscriptions(inscriptions) {
                 <td>${mardi}</td>
                 <td>${mercredi}</td>
 
-                <!-- 🔥 AJOUT COLONNE -->
+                <!-- MERCREDI MATIN -->
                 <td>${mercrediMatin}</td>
 
                 <td>${date}</td>
@@ -164,7 +123,7 @@ function renderInscriptions(inscriptions) {
                 </td>
 
                 <td>
-                    <button class="btn-delete" onclick="deleteInscription('${item.id}')">
+                    <button onclick="deleteInscription('${item.id}')">
                         Supprimer
                     </button>
                 </td>
@@ -174,41 +133,14 @@ function renderInscriptions(inscriptions) {
 }
 
 /* =========================
-   PRESENCE UPDATE
-========================= */
-document.addEventListener("change", async (e) => {
-    if (!e.target.classList.contains("presence-checkbox")) return;
-
-    const id = e.target.dataset.id;
-    const presence = e.target.checked ? 1 : 0;
-
-    try {
-        await fetch(`/api/admin/presence/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ presence })
-        });
-    } catch (err) {
-        console.error(err);
-    }
-});
-
-/* =========================
    SEARCH
 ========================= */
 searchInput.addEventListener("input", function () {
-    const value = this.value.toLowerCase();
+
+    const v = this.value.toLowerCase();
 
     const filtered = allInscriptions.filter(item =>
-        (item.lastname && item.lastname.toLowerCase().includes(value)) ||
-        (item.firstname && item.firstname.toLowerCase().includes(value)) ||
-        (item.email && item.email.toLowerCase().includes(value)) ||
-        (item.phone && item.phone.includes(value)) ||
-        (item.profession && item.profession.toLowerCase().includes(value)) ||
-        (item.status && item.status.toLowerCase().includes(value)) ||
-        (item.wilaya && item.wilaya.toLowerCase().includes(value)) ||
-        (item.program && item.program.toLowerCase().includes(value)) ||
-        (item.mercrediMatin && item.mercrediMatin.toLowerCase?.includes(value))
+        Object.values(item).join(" ").toLowerCase().includes(v)
     );
 
     renderInscriptions(filtered);
@@ -218,45 +150,14 @@ searchInput.addEventListener("input", function () {
    DELETE
 ========================= */
 async function deleteInscription(id) {
-    if (!confirm("Supprimer cet inscrit ?")) return;
-
-    try {
-        const response = await fetch(`/api/admin/inscriptions/${id}`, {
-            method: "DELETE"
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            loadInscriptions();
-        }
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-/* =========================
-   MESSAGE
-========================= */
-function showMessage(element, text, color) {
-    element.style.color = color;
-    element.textContent = text;
-}
-
-/* =========================
-   AUTO LOGIN
-========================= */
-if (localStorage.getItem("parajunaAdmin") === "connected") {
-    showDashboard();
+    await fetch(`/api/admin/inscriptions/${id}`, { method: "DELETE" });
     loadInscriptions();
 }
 
 /* =========================
-   EXPORT EXCEL
+   EXPORT
 ========================= */
-exportExcelBtn.addEventListener("click", exportToExcel);
-
-function exportToExcel() {
+exportExcelBtn.addEventListener("click", () => {
 
     const data = allInscriptions.map(item => ({
         Nom: item.lastname,
@@ -267,20 +168,12 @@ function exportToExcel() {
         Statut: item.status,
         Wilaya: item.wilaya,
         Programme: item.program,
-
-        // 🔥 AJOUT EXPORT
-        "Mercredi matin": item.mercrediMatin || "-",
-
-        Presence: item.presence == 1 ? "Présent" : "Absent",
         Date: item.created_at
-            ? new Date(item.created_at).toLocaleDateString("fr-FR")
-            : "-"
     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Inscriptions");
-
-    XLSX.writeFile(workbook, "Parajuna_Inscriptions.xlsx");
-}
+    XLSX.utils.book_append_sheet(wb, ws, "Inscriptions");
+    XLSX.writeFile(wb, "Parajuna.xlsx");
+});
