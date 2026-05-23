@@ -534,3 +534,74 @@ button[type="submit"]:active {
         font-size: 0.9rem;
     }
 }
+
+/* =========================
+   MERCREDI MATIN MULTI-CHOIX
+========================= */
+
+.checkbox-group{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.checkbox-item{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    padding: 16px 18px;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(245,158,11,.15);
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+
+    color: var(--white);
+
+    font-family: 'Rajdhani', sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.checkbox-item:hover{
+    transform: translateY(-2px);
+    border-color: rgba(245,158,11,.45);
+    background: rgba(245,158,11,.08);
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.25),
+        0 0 25px rgba(245,158,11,.08);
+}
+
+.checkbox-item input[type="checkbox"]{
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gold);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* version SAFE sans :has() */
+.checkbox-item input[type="checkbox"]:checked{
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px){
+    .checkbox-item{
+        padding: 14px 14px;
+        font-size: .88rem;
+        gap: 12px;
+    }
+
+    .checkbox-item input[type="checkbox"]{
+        width: 16px;
+        height: 16px;
+    }
+}
