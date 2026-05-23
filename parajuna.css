@@ -573,3 +573,59 @@ a{
         padding:42px 24px;
     }
 }
+/* ===================================================
+   --- BOUTON TELECHARGEMENT PROGRAMME PDF ---
+=================================================== */
+.download-program-container {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 36px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--white);
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: var(--shadow-dark);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 158, 11, 0.7);
+    color: var(--gold-light);
+    box-shadow: var(--shadow-gold);
+}
+
+.download-icon {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.download-btn:hover .download-icon {
+    transform: translateY(2px); /* Effet d'animation de la flèche vers le bas au survol */
+}
+
+/* Ajustement pour les téléphones portables */
+@media(max-width: 760px){
+    .download-btn {
+        width: 100%;
+        max-width: 340px;
+        font-size: 0.95rem;
+        padding: 12px 24px;
+        justify-content: center;
+    }
+}
