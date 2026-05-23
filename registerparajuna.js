@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusInput = document.getElementById("status");
     const wilayaInput = document.getElementById("wilaya");
 
-    // ✔️ CORRECTION ICI (remplacement de programInput)
     const progDimancheInput = document.getElementById("prog_dimanche");
     const progLundiInput = document.getElementById("prog_lundi");
     const progMardiInput = document.getElementById("prog_mardi");
@@ -60,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================== */
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         clearMessage();
 
         const lastname = lastnameInput.value.trim();
@@ -71,18 +69,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const status = statusInput.value;
         const wilaya = wilayaInput.value;
 
-        /* ✔️ CORRECTION ICI */
         const progDimanche = progDimancheInput.value;
         const progLundi = progLundiInput.value;
         const progMardi = progMardiInput.value;
         const progMercredi = progMercrediInput.value;
 
-        // ✔️ NOUVEAU CHAMP programme (fusion)
+        /* =========================
+           MERCREDI MATIN MULTI-CHOIX
+        ========================== */
+        const mercrediMatin = Array.from(
+            document.querySelectorAll('input[name="mercredi_matin"]:checked')
+        ).map(item => item.parentElement.textContent.trim());
+
+        /* =========================
+           PROGRAMME FUSION
+        ========================== */
         const program = `
 Dimanche: ${progDimanche}
 Lundi: ${progLundi}
 Mardi: ${progMardi}
 Mercredi: ${progMercredi}
+
+Mercredi matin:
+${mercrediMatin.length > 0 ? mercrediMatin.join(" | ") : "Aucun"}
 `;
 
         /* =========================
@@ -156,7 +165,6 @@ Mercredi: ${progMercredi}
             console.error(err);
             showError("Erreur serveur, veuillez réessayer.");
         }
-
     });
 
     /* =========================
