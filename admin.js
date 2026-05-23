@@ -158,7 +158,6 @@ async function deleteInscription(id) {
    EXPORT
 ========================= */
 function exportToExcel() {
-
     const data = allInscriptions.map(item => {
 
         const program = item.program || "";
@@ -169,17 +168,17 @@ function exportToExcel() {
         const mercredi = (program.match(/Mercredi:\s*(.*)/) || [])[1] || "-";
 
         const mercrediMatin = (program.match(/Mercredi matin:\s*([\s\S]*)/) || [])[1]
-            ? (program.match(/Mercredi matin:\s*([\s\S]*)/)[1]).trim()
+            ? program.match(/Mercredi matin:\s*([\s\S]*)/)[1].trim()
             : "-";
 
         return {
-            Nom: item.lastname,
-            Prenom: item.firstname,
-            Email: item.email,
-            Telephone: item.phone,
-            Profession: item.profession,
-            Statut: item.status,
-            Wilaya: item.wilaya,
+            Nom: item.lastname || "-",
+            Prenom: item.firstname || "-",
+            Email: item.email || "-",
+            Telephone: item.phone || "-",
+            Profession: item.profession || "-",
+            Statut: item.status || "-",
+            Wilaya: item.wilaya || "-",
 
             Dimanche: dimanche,
             Lundi: lundi,
@@ -202,3 +201,6 @@ function exportToExcel() {
 
     XLSX.writeFile(workbook, "Parajuna_Inscriptions.xlsx");
 }
+
+/* ✅ IMPORTANT */
+exportExcelBtn.addEventListener("click", exportToExcel);
