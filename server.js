@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
 const path = require("path");
-const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,7 +23,6 @@ app.use(express.static(__dirname));
    DATABASE (FIX RAILWAY)
 ========================= */
 
-/* DEBUG ENV (important pour Railway) */
 console.log("MYSQL_URL =", process.env.MYSQL_URL);
 console.log({
     host: process.env.MYSQLHOST,
@@ -33,14 +31,11 @@ console.log({
     port: process.env.MYSQLPORT
 });
 
-/* CONNECTION SAFE */
 let db;
 
 if (process.env.MYSQL_URL) {
-    // Railway recommended way
     db = mysql.createPool(process.env.MYSQL_URL);
 } else {
-    // fallback manual
     db = mysql.createPool({
         host: process.env.MYSQLHOST,
         user: process.env.MYSQLUSER || "root",
@@ -60,17 +55,6 @@ db.getConnection((err, connection) => {
     }
     console.log("✔ MySQL connecté avec succès");
     connection.release();
-});
-
-/* =========================
-   EMAIL CONFIG
-========================= */
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: "sayadbouchraamina@gmail.com",
-        pass: "ujav qgup wquk fjkt"
-    }
 });
 
 /* =========================
@@ -142,14 +126,7 @@ app.post("/api/register", (req, res) => {
             });
         }
 
-        transporter.sendMail({
-            from: "Parajuna <sayadbouchraamina@gmail.com>",
-            to: email,
-            subject: "Confirmation inscription Parajuna",
-            text: `Bonjour ${firstname} ${lastname},
-
-Votre inscription à PARAJUNA est confirmée ✔`
-        });
+        // ❌ EMAIL SUPPRIMÉ (ancien sendMail retiré)
 
         return res.json({
             success: true,
